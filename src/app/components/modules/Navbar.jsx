@@ -17,6 +17,7 @@ import {
 import { getProjectDetails } from '@/app/script/Getproject';
 import { FaCoffee } from 'react-icons/fa';
 import FilterSidebar from './Modal';
+import AddWorkModal from './Add';
 
 const ProjectNavbar = () => {
   const [projectData, setProjectData] = useState(null);
@@ -25,7 +26,9 @@ const ProjectNavbar = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const dropdownRef = useRef(null);
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isWorkModalOpen, setIsWorkModalOpen] = useState(false);
+
 
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen)
@@ -191,6 +194,7 @@ const ProjectNavbar = () => {
 
           {/* Add Work Button */}
           <motion.button
+          onClick={() => setIsWorkModalOpen(true)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm"
@@ -234,6 +238,10 @@ const ProjectNavbar = () => {
       <FilterSidebar
        isOpen={isFilterOpen} 
         onClose={() => setIsFilterOpen(false)} 
+      />
+      <AddWorkModal
+      isOpen={isWorkModalOpen} 
+        onClose={() => setIsWorkModalOpen(false)} 
       />
 
       {/* Mobile Project Name */}
