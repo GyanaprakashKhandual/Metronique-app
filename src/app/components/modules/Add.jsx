@@ -203,7 +203,7 @@ const AddWorkModal = ({ isOpen, onClose }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0"
             onClick={onClose}
           />
           
@@ -213,7 +213,7 @@ const AddWorkModal = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', ease: 'easeInOut', duration: 0.3 }}
-            className="fixed top-[66px] right-0 h-[calc(100vh-66px)] w-full max-w-md bg-white dark:bg-gray-800 shadow-xl z-50 overflow-y-auto"
+            className="fixed top-[66px] right-0 h-[calc(100vh-66px)] w-full max-w-md bg-white dark:bg-gray-800 border-l border-blue-100 z-50 overflow-y-auto"
           >
             <div className="p-6">
               {/* Header */}
