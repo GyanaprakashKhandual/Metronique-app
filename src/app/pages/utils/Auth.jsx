@@ -392,9 +392,40 @@ const handleLogin = async (e) => {
   // ==================== RENDER ====================
   
   return (
-    <div className="min-h-screen flex" style={{
-      background: 'radial-gradient(circle, #fce7f3, #ffffff, #f0f9ff, #dbeafe)'
-    }}>
+    <div className="min-h-screen flex bg-[radial-gradient(circle_at_top,_#a855f7,_#fff0f6,_#fde68a)]">
+    {/* Decorative SVG elements */}
+<div className="absolute inset-0 overflow-hidden pointer-events-none">
+  <svg
+    className="absolute top-0 left-0 w-1/3 opacity-10"
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill="#a855f7" // purple
+      d="M50,-50C64.5,-36.1,75.2,-18,74.3,-0.9C73.4,16.2,60.9,32.4,46.4,45.1C32,57.8,15.6,67,-3.4,70.4C-22.3,73.8,-44.7,71.4,-58.1,58.7C-71.6,46,-76.2,23,-74.5,1.5C-72.8,-20.1,-64.7,-40.1,-51.3,-54C-37.8,-67.9,-18.9,-75.6,0.3,-75.9C19.5,-76.2,39,-69.1,50,-50Z"
+      transform="translate(100 100)"
+    />
+  </svg>
+
+  <svg
+    className="absolute bottom-0 right-0 w-1/4 opacity-10"
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill="#ec4899" // pink
+      d="M42.4,-56.9C55.3,-47.9,66.5,-35.8,71.1,-21.5C75.7,-7.2,73.6,9.3,66.2,23.8C58.8,38.3,46.1,50.8,31.2,60.1C16.3,69.4,-0.8,75.6,-16.3,71.8C-31.8,68,-45.6,54.3,-56.1,38.9C-66.6,23.5,-73.8,6.5,-72.1,-10.9C-70.3,-28.2,-59.5,-45.9,-44.5,-54.6C-29.5,-63.3,-10.3,-63.1,5.5,-68.9C21.3,-74.7,42.6,-86.5,42.4,-56.9Z"
+      transform="translate(100 100)"
+    />
+  </svg>
+
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/30"></div>
+</div>
+
+{/* Background container */}
+
+  {/* Your content here */}
+
       
       {/* LEFT SIDE - Welcome Section */}
           <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12">
