@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { getProjectDetails } from '@/app/script/Getproject';
 import { FaCoffee } from 'react-icons/fa';
+import FilterSidebar from './Modal';
 
 const ProjectNavbar = () => {
   const [projectData, setProjectData] = useState(null);
@@ -24,6 +25,11 @@ const ProjectNavbar = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const dropdownRef = useRef(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+
+  const toggleFilter = () => {
+    setIsFilterOpen(!isFilterOpen)
+  }
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -195,11 +201,13 @@ const ProjectNavbar = () => {
 
           {/* Filter Button */}
           <motion.button
+          onClick={toggleFilter}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="p-2 bg-white border border-blue-100 rounded-lg hover:shadow-md transition-shadow duration-200"
           >
-            <Filter className="w-4 h-4 text-gray-600" />
+            <Filter
+            className="w-4 h-4 text-gray-600" />
           </motion.button>
 
           {/* Settings Button */}
@@ -221,6 +229,12 @@ const ProjectNavbar = () => {
           </motion.button>
         </div>
       </div>
+
+
+      <FilterSidebar
+       isOpen={isFilterOpen} 
+        onClose={() => setIsFilterOpen(false)} 
+      />
 
       {/* Mobile Project Name */}
       <div className="sm:hidden mt-2">
