@@ -66,30 +66,8 @@ export default async function ProjectPage({ params }) {
     console.log("Parsed project data:", project, works);
 
     return (
-      <div className="p-6">
+      <div className="">
         <ProjectNavbar/>
-        <h1 className="text-3xl font-bold">{project?.projectName}</h1>
-        <p className="mt-4 text-gray-700">{project?.projectDesc}</p>
-        <p className="mt-2 text-sm text-gray-500">
-          Created At:{" "}
-          {project?.createdAt
-            ? new Date(project.createdAt).toLocaleString()
-            : "N/A"}
-        </p>
-
-        {/* ✅ Render works if available */}
-        <div className="mt-6">
-          <h2 className="text-2xl font-semibold">Works</h2>
-          {works.length > 0 ? (
-            <ul className="list-disc list-inside mt-2 text-gray-700">
-              {works.map((work) => (
-                <li key={work._id}>{work.name || "Unnamed work"}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-2 text-gray-500">No works available</p>
-          )}
-        </div>
       </div>
     );
   } catch (error) {

@@ -28,7 +28,8 @@ export const getProjectDetails = async () => {
     );
 
     // 4. Return project data
-    return response.data.data;
+    // FIX: The API now returns the project directly, not nested under "data"
+    return response.data; // Changed from response.data.data to response.data
   } catch (error) {
     console.error("Error fetching project details:", error.message);
     return null;

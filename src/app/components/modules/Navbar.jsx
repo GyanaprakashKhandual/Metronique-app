@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Coffee, 
   Search, 
   ChevronDown, 
   BarChart3, 
@@ -15,23 +14,45 @@ import {
   Settings, 
   User 
 } from 'lucide-react';
-
-// Import your project details function
 import { getProjectDetails } from '@/app/script/Getproject';
-
+import { FaCoffee } from 'react-icons/fa';
 
 const ProjectNavbar = () => {
   const [projectData, setProjectData] = useState(null);
   const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     const fetchProject = async () => {
-      const data = await getProjectDetails();
-      setProjectData(data);
+      try {
+        setLoading(true);
+        const data = await getProjectDetails();
+        
+        console.log("Fetched project data:", data);
+        
+        if (data) {
+          setProjectData(data);
+          setError(null);
+        } else {
+          setError("Failed to load project data");
+        }
+      } catch (err) {
+        console.error("Error fetching project:", err);
+        setError("Error loading project data");
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchProject();
+    
+    // Add a small delay to ensure the component is mounted and URL is available
+    const timer = setTimeout(() => {
+      fetchProject();
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -55,12 +76,15 @@ const ProjectNavbar = () => {
     setIsViewDropdownOpen(false);
   };
 
+  // Debug: Log the current state
+  console.log("Navbar state:", { loading, error, projectData });
+
   return (
     <motion.nav 
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="bg-gradient-to-r from-sky-50 via-white to-blue-50 border-b border-blue-100 px-4 py-3 shadow-sm"
+      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 py-3"
     >
       <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
         
@@ -70,30 +94,33 @@ const ProjectNavbar = () => {
           <motion.div
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
-            className="p-2 rounded-lg bg-white shadow-sm border border-blue-100 hover:shadow-md transition-shadow duration-200"
           >
-            <Coffee className="w-5 h-5 text-blue-600" />
+            <FaCoffee className="w-8 h-8 text-blue-900" />
           </motion.div>
 
           {/* Project Name */}
           <div className="hidden sm:block">
-            {projectData ? (
+            {loading ? (
+              <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
+            ) : error ? (
+              <div className="text-red-500 text-sm">Error loading project</div>
+            ) : projectData ? (
               <motion.h1 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
                 className="text-xl font-semibold text-gray-800 truncate max-w-xs"
               >
-                {projectData.projectName}
+                {projectData.projectName || "Unnamed Project"}
               </motion.h1>
             ) : (
-              <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
+              <div className="text-gray-500">No project data</div>
             )}
           </div>
         </div>
 
         {/* Center Section - Search Bar */}
-        <div className="flex-1 max-w-md mx-4">
+        <div className="flex-1 max-w-lg mx-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
@@ -101,7 +128,7 @@ const ProjectNavbar = () => {
               placeholder="Search projects, tasks..."
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm hover:shadow-md transition-shadow duration-200"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent shadow-sm hover:shadow-sm transition-shadow duration-200"
             />
           </div>
         </div>
@@ -117,7 +144,7 @@ const ProjectNavbar = () => {
               onClick={() => setIsViewDropdownOpen(!isViewDropdownOpen)}
               className="flex items-center space-x-2 px-3 py-2 bg-white border border-blue-100 rounded-lg hover:shadow-md transition-shadow duration-200 text-gray-700"
             >
-              <span className="hidden sm:inline text-sm font-medium">View</span>
+              <span className="hidden sm:inline text-sm font-medium">View Options</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isViewDropdownOpen ? 'rotate-180' : ''}`} />
             </motion.button>
             
@@ -197,17 +224,21 @@ const ProjectNavbar = () => {
 
       {/* Mobile Project Name */}
       <div className="sm:hidden mt-2">
-        {projectData ? (
+        {loading ? (
+          <div className="h-5 w-40 bg-gray-200 rounded animate-pulse"></div>
+        ) : error ? (
+          <div className="text-red-500 text-sm">Error loading project</div>
+        ) : projectData ? (
           <motion.h1 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-lg font-semibold text-gray-800 truncate"
           >
-            {projectData.projectName}
+            {projectData.projectName || "Unnamed Project"}
           </motion.h1>
         ) : (
-          <div className="h-5 w-40 bg-gray-200 rounded animate-pulse"></div>
+          <div className="text-gray-500 text-sm">No project data</div>
         )}
       </div>
     </motion.nav>
