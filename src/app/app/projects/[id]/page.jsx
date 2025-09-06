@@ -1,5 +1,6 @@
 // app/projects/[id]/page.jsx
 import ProjectNavbar from "@/app/components/modules/Navbar";
+import ProjectWorksPage from "@/app/pages/app/Kanban";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
@@ -68,6 +69,7 @@ export default async function ProjectPage({ params }) {
     return (
       <div className="">
         <ProjectNavbar/>
+        <ProjectWorksPage/>
       </div>
     );
   } catch (error) {
