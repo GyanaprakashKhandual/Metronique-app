@@ -18,7 +18,6 @@ import {
   Search
 } from "lucide-react";
 
-
 const statusConfig = {
   "TODO": { 
     color: "bg-slate-100 text-slate-700", 
@@ -65,6 +64,7 @@ export default function ProjectWorksPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("");
   const [draggedItem, setDraggedItem] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const fetchWorks = async () => {
@@ -107,6 +107,83 @@ export default function ProjectWorksPage() {
     fetchWorks();
   }, []);
 
+  const updateWorkStatus = async (workId, newStatus) => {
+    try {
+      setIsUpdating(true);
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token not found in localStorage");
+      
+      const pathSegments = window.location.pathname.split("/");
+      const projectId = pathSegments[pathSegments.length - 1];
+      
+      const response = await fetch(
+        `http://localhost:5000/api/v1/work/${projectId}/${workId}`,
+        {
+          method: 'PUT',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: newStatus })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Update local state to reflect the change
+      setWorks(prev => prev.map(work => 
+        work._id === workId 
+          ? { ...work, status: newStatus }
+          : work
+      ));
+    } catch (err) {
+      setError(err.message || "Failed to update work status");
+      // Revert the change in UI if API call fails
+      setWorks(prev => prev.map(work => 
+        work._id === workId 
+          ? { ...work, status: draggedItem.status }
+          : work
+      ));
+    } finally {
+      setIsUpdating(false);
+      setDraggedItem(null);
+    }
+  };
+
+  const deleteWork = async (workId) => {
+    try {
+      if (!confirm("Are you sure you want to delete this work item?")) return;
+      
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token not found in localStorage");
+      
+      const pathSegments = window.location.pathname.split("/");
+      const projectId = pathSegments[pathSegments.length - 1];
+      
+      const response = await fetch(
+        `http://localhost:5000/api/v1/work/${projectId}/${workId}`,
+        {
+          method: 'DELETE',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Remove from local state
+      setWorks(prev => prev.filter(work => work._id !== workId));
+    } catch (err) {
+      setError(err.message || "Failed to delete work");
+    }
+  };
+
   // Filter works
   const filteredWorks = works.filter(work => {
     const matchesSearch = work.workType.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -135,17 +212,31 @@ export default function ProjectWorksPage() {
   const handleDrop = (e, newStatus) => {
     e.preventDefault();
     if (draggedItem && draggedItem.status !== newStatus) {
-      setWorks(prev => prev.map(work => 
-        work._id === draggedItem._id 
-          ? { ...work, status: newStatus }
-          : work
-      ));
+      // Update the status via API
+      updateWorkStatus(draggedItem._id, newStatus);
     }
-    setDraggedItem(null);
   };
 
   const getStatusCount = (status) => {
     return groupedWorks[status]?.length || 0;
+  };
+
+  const calculateTotalHours = (work) => {
+    if (!work.timeLogs || work.timeLogs.length === 0) return "0h";
+    
+    const totalMinutes = work.timeLogs.reduce((total, log) => {
+      if (log.startTime && log.endTime) {
+        const start = new Date(log.startTime);
+        const end = new Date(log.endTime);
+        return total + (end - start) / (1000 * 60);
+      }
+      return total;
+    }, 0);
+    
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.round(totalMinutes % 60);
+    
+    return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
   };
 
   if (loading) {
@@ -178,6 +269,34 @@ export default function ProjectWorksPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <div className="max-w-full mx-auto">
+        {/* Header with Filters */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <h1 className="text-2xl font-bold text-gray-800">Project Works</h1>
+          
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search works..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            
+            <select
+              value={selectedPriority}
+              onChange={(e) => setSelectedPriority(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">All Priorities</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </div>
 
         {/* Kanban Board */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -234,7 +353,10 @@ export default function ProjectWorksPage() {
                             <button className="p-1 hover:bg-gray-100 rounded">
                               <Edit3 className="w-3 h-3 text-gray-500" />
                             </button>
-                            <button className="p-1 hover:bg-gray-100 rounded">
+                            <button 
+                              className="p-1 hover:bg-gray-100 rounded"
+                              onClick={() => deleteWork(work._id)}
+                            >
                               <Trash2 className="w-3 h-3 text-gray-500" />
                             </button>
                           </div>
@@ -249,6 +371,11 @@ export default function ProjectWorksPage() {
                         <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                           {work.workDesc}
                         </p>
+
+                        {/* Total Hours */}
+                        <div className="text-xs text-gray-500 mb-3">
+                          Total: {calculateTotalHours(work)}
+                        </div>
 
                         {/* Tags */}
                         {work.tags && work.tags.length > 0 && (
