@@ -18,8 +18,10 @@ import { getProjectDetails } from '@/app/script/Getproject';
 import { FaCoffee } from 'react-icons/fa';
 import FilterSidebar from './Modal';
 import AddWorkModal from './Add';
+import ProjectWorksPage from '@/app/pages/app/Kanban';
 
 const ProjectNavbar = () => {
+  const [showWork, setShowWork] = useState(false);
   const [projectData, setProjectData] = useState(null);
   const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -184,13 +186,15 @@ const ProjectNavbar = () => {
 
           {/* Kanban Button */}
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
-          >
-            <Trello className="w-4 h-4" />
-            <span className="hidden sm:inline text-sm font-medium">Kanban</span>
-          </motion.button>
+  onClick={() => setShowWork((prev) => !prev)}
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+  className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+>
+  <Trello className="w-4 h-4" />
+  <span className="hidden sm:inline text-sm font-medium">Kanban</span>
+</motion.button>
+
 
           {/* Add Work Button */}
           <motion.button
@@ -263,7 +267,13 @@ const ProjectNavbar = () => {
           <div className="text-gray-500 text-sm">No project data</div>
         )}
       </div>
+       {showWork && (
+        <div className="p-6">
+          <ProjectWorksPage />
+        </div>
+      )}
     </motion.nav>
+    
   );
 };
 

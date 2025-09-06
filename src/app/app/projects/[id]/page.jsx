@@ -69,7 +69,6 @@ export default async function ProjectPage({ params }) {
     return (
       <div className="">
         <ProjectNavbar/>
-        <ProjectWorksPage/>
       </div>
     );
   } catch (error) {
