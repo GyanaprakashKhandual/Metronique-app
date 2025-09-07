@@ -6,14 +6,14 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, MoreVertical, ChevronRight } from 'lucide-react'
 
-export const Dropdown = ({ 
+const Dropdown = ({
   options = [],
   placeholder = "Select an option",
   value = null,
-  onChange = () => {},
+  onChange = () => { },
   disabled = false,
-  variant = "default", // "default", "primary", "danger"
-  size = "md", // "sm", "md", "lg"
+  variant = "default",
+  size = "md",
   searchable = false,
   multiple = false,
   className = "",
@@ -26,7 +26,7 @@ export const Dropdown = ({
   const searchInputRef = useRef(null)
 
   // Filter options based on search term
-  const filteredOptions = options.filter(option => 
+  const filteredOptions = options.filter(option =>
     option.label?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     option.value?.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -56,7 +56,7 @@ export const Dropdown = ({
       const newSelectedValues = selectedValues.includes(option.value)
         ? selectedValues.filter(v => v !== option.value)
         : [...selectedValues, option.value]
-      
+
       setSelectedValues(newSelectedValues)
       onChange(newSelectedValues)
     } else {
@@ -117,7 +117,7 @@ export const Dropdown = ({
         style={{ backgroundColor: "var(--color-background)", color: "var(--color-text-primary)" }}
         whileTap={!disabled ? { scale: 0.98 } : {}}
       >
-        <span 
+        <span
           className="truncate"
           style={{ color: selectedValues && selectedValues.length > 0 ? "var(--color-text-primary)" : "var(--color-text-secondary)" }}
         >
@@ -163,7 +163,7 @@ export const Dropdown = ({
                   />
                 </div>
               )}
-              
+
               {filteredOptions.length === 0 ? (
                 <div className="px-4 py-3 text-sm text-center" style={{ color: "var(--color-text-secondary)" }}>
                   {searchTerm ? 'No results found' : 'No options available'}
@@ -216,8 +216,8 @@ export const Dropdown = ({
 
 
 
-export const ThreeDotsDropdown = ({ 
-  options = [], 
+const ThreeDotsDropdown = ({
+  options = [],
   position = 'bottom-right',
   className = '',
   iconSize = 16,
@@ -231,7 +231,7 @@ export const ThreeDotsDropdown = ({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
-          buttonRef.current && !buttonRef.current.contains(event.target)) {
+        buttonRef.current && !buttonRef.current.contains(event.target)) {
         setIsOpen(false)
       }
     }
@@ -293,12 +293,12 @@ export const ThreeDotsDropdown = ({
                   disabled={option.disabled}
                   className={`
                     w-full px-4 py-2 text-left flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150
-                    ${option.disabled 
-                      ? 'text-gray-400 cursor-not-allowed' 
+                    ${option.disabled
+                      ? 'text-gray-400 cursor-not-allowed'
                       : 'text-gray-700 dark:text-gray-300 cursor-pointer'
                     }
-                    ${option.destructive 
-                      ? 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20' 
+                    ${option.destructive
+                      ? 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20'
                       : ''
                     }
                   `}
@@ -311,7 +311,7 @@ export const ThreeDotsDropdown = ({
                       {React.cloneElement(option.icon, { size: 16 })}
                     </span>
                   )}
-                  
+
                   {/* Label and description */}
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium truncate">
@@ -328,7 +328,7 @@ export const ThreeDotsDropdown = ({
                   {option.hasSubmenu && (
                     <ChevronRight size={14} className="text-gray-400" />
                   )}
-                  
+
                   {/* Badge or shortcut */}
                   {option.badge && (
                     <span className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded text-gray-600 dark:text-gray-400">
@@ -337,7 +337,7 @@ export const ThreeDotsDropdown = ({
                   )}
                 </motion.button>
               ))}
-              
+
               {options.length === 0 && (
                 <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                   No options available
@@ -350,3 +350,82 @@ export const ThreeDotsDropdown = ({
     </div>
   )
 }
+
+
+const FilterDropdown = ({ label, icon, value, onChange, options, placeholder }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <motion.button
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-md text-left flex items-center justify-between hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+      >
+        <span className={value ? "text-gray-900" : "text-gray-500"}>
+          {value || placeholder}
+        </span>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown size={16} className="text-gray-400" />
+        </motion.div>
+      </motion.button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.15 }}
+            className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-auto"
+          >
+            {options.map((option, index) => (
+              <motion.button
+                key={option}
+                whileHover={{ backgroundColor: "#f1f5f9" }}
+                onClick={() => {
+                  onChange(option)
+                  setIsOpen(false)
+                }}
+                className="w-full px-3 py-2 text-left hover:bg-slate-50 flex items-center justify-between text-sm transition-colors"
+              >
+                <span>{option}</span>
+                {value === option && <Check size={14} className="text-blue-600" />}
+              </motion.button>
+            ))}
+            {options.length > 0 && (
+              <hr className="border-gray-100 my-1" />
+            )}
+            <motion.button
+              whileHover={{ backgroundColor: "#f1f5f9" }}
+              onClick={() => {
+                onChange('')
+                setIsOpen(false)
+              }}
+              className="w-full px-3 py-2 text-left hover:bg-slate-50 text-sm text-gray-500 transition-colors"
+            >
+              Clear selection
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export { Dropdown, ThreeDotsDropdown, FilterDropdown };

@@ -1,5 +1,6 @@
 
 import { WorkNavbar } from "@/app/components/modules/Navbar";
+import Error from "@/app/components/utils/Error";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
@@ -58,24 +59,18 @@ export default async function ProjectPage({ params }) {
 
   try {
     const { project, works } = await getProjectById(id);
-    
+
 
     return (
       <div>
-        <WorkNavbar/>
+        <WorkNavbar />
       </div>
     );
   } catch (error) {
     console.error("Error rendering project page:", error);
     return (
-      <div className="p-6">
-        <h1 className="text-3xl font-bold text-red-600">Error</h1>
-        <p className="mt-4 text-gray-700">{error.message}</p>
-        {error.message.includes("Unauthorized") && (
-          <p className="mt-2 text-sm text-blue-600">
-            <a href="/login">Please log in to continue</a>
-          </p>
-        )}
+      <div>
+        <Error />
       </div>
     );
   }

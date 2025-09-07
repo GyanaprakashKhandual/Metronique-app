@@ -19,7 +19,7 @@ import ProjectModal from "../assets/Modal";
 import { FaCoffee } from "react-icons/fa";
 import { CalfFolder, CalfFolderOpen } from "../utils/Icon";
 
-const Sidebar = () => {
+const ProjectSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -447,4 +447,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export {ProjectSidebar}

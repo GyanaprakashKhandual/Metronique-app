@@ -460,4 +460,4 @@ const AddWorkModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddWorkModal;
+export {AddWorkModal};
