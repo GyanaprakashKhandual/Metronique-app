@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiTrash2, FiChevronDown, FiExternalLink, FiFile, FiCalendar, FiClock, FiAlertCircle, FiCheckCircle, FiPauseCircle, FiXCircle, FiEdit3 } from 'react-icons/fi';
+import { ArrowDownGoogle } from '@/app/components/utils/Icon';
 
 const WorkTableComponent = () => {
   const [works, setWorks] = useState([]);
@@ -366,7 +367,7 @@ const WorkTableComponent = () => {
                               {getStatusIcon(work.status)}
                               <span className="ml-1">{work.status}</span>
                             </span>
-                            <FiChevronDown size={14} className="ml-1" />
+                            <ArrowDownGoogle size={14} className="ml-1" />
                           </button>
                           
                           <AnimatePresence>

@@ -1,6 +1,7 @@
 // app/projects/[id]/page.jsx
 import ProjectNavbar from "@/app/components/modules/Navbar";
 import WorkDisplayComponent from "@/app/pages/app/Card";
+import WorkAnalyticsDashboard from "@/app/pages/app/Graph";
 import ProjectWorksPage from "@/app/pages/app/Kanban";
 import WorkTableComponent from "@/app/pages/app/Table";
 import { cookies } from "next/headers";
@@ -71,7 +72,7 @@ export default async function ProjectPage({ params }) {
     return (
       <div className="">
         <ProjectNavbar/>
-        <WorkTableComponent/>
+        <WorkAnalyticsDashboard/>
       </div>
     );
   } catch (error) {

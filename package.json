@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@nivo/bar": "^0.99.0",
+    "@nivo/calendar": "^0.99.0",
+    "@nivo/line": "^0.99.0",
+    "@nivo/pie": "^0.99.0",
     "axios": "^1.11.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",
