@@ -56,4 +56,13 @@ const CalfFolderOpen = () => {
 
 
 
-module.exports = { CalfFolder, CalfFolderOpen };
+const ArrowDownGoogle = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+</svg>
+
+  )
+}
+
+module.exports = { CalfFolder, CalfFolderOpen, ArrowDownGoogle };
