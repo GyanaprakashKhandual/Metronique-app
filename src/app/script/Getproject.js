@@ -1,4 +1,3 @@
-// utils/getProjectDetails.js
 import axios from "axios";
 
 /**

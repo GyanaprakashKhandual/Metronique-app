@@ -4,9 +4,9 @@ import React from 'react'
 function page() {
   return (
     <div>
-      <AuthSystem/>
+      <AuthSystem />
     </div>
   )
 }
 
-export default page
+export default page;

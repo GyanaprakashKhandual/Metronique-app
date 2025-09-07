@@ -1,9 +1,8 @@
-import MetroniqueLanding from "./pages/utils/Home";
-
+import Homepage from "./pages/utils/Home";
 export default function Home() {
-  return(
+  return (
     <div>
-      <MetroniqueLanding/>
+      <Homepage />
     </div>
   );
 }
