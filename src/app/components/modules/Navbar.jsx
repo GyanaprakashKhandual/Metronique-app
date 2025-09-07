@@ -22,6 +22,7 @@ import ProjectWorksPage from '@/app/pages/app/Kanban';
 import WorkAnalyticsDashboard from '@/app/pages/app/Graph';
 import WorkDisplayComponent from '@/app/pages/app/Card';
 import WorkTableComponent from '@/app/pages/app/Table';
+import { ArrowDownGoogle } from '../utils/Icon';
 
 const ProjectNavbar = () => {
   const [showWork, setShowWork] = useState(false);
@@ -101,7 +102,7 @@ const handleViewSelect = (option) => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 py-3"
+      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 py-3 h-15 w-full"
     >
       <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
         
@@ -162,7 +163,7 @@ const handleViewSelect = (option) => {
               className="flex items-center space-x-2 px-3 py-2 bg-white border border-blue-100 rounded-lg hover:shadow-md transition-shadow duration-200 text-gray-700"
             >
               <span className="hidden sm:inline text-sm font-medium">View Options</span>
-              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isViewDropdownOpen ? 'rotate-180' : ''}`} />
+              <ArrowDownGoogle className={`w-4 h-4 transition-transform duration-200 ${isViewDropdownOpen ? 'rotate-180' : ''}`} />
             </motion.button>
             
             <AnimatePresence>
@@ -254,27 +255,8 @@ const handleViewSelect = (option) => {
         onClose={() => setIsWorkModalOpen(false)} 
       />
 
-      {/* Mobile Project Name */}
-      <div className="sm:hidden mt-2">
-        {loading ? (
-          <div className="h-5 w-40 bg-gray-200 rounded animate-pulse"></div>
-        ) : error ? (
-          <div className="text-red-500 text-sm">Error loading project</div>
-        ) : projectData ? (
-          <motion.h1 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg font-semibold text-gray-800 truncate"
-          >
-            {projectData.projectName || "Unnamed Project"}
-          </motion.h1>
-        ) : (
-          <div className="text-gray-500 text-sm">No project data</div>
-        )}
-      </div>
        {showWork && (
-        <div className="p-6">
+        <div className="">
           <ProjectWorksPage />
         </div>
       )}
