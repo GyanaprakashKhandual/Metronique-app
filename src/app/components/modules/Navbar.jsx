@@ -16,12 +16,12 @@ import {
 } from 'lucide-react';
 import { getProjectDetails } from '@/app/script/Getproject';
 import { FaCoffee } from 'react-icons/fa';
-import FilterSidebar from './Modal';
-import AddWorkModal from './Add';
-import ProjectWorksPage from '@/app/pages/app/Kanban';
-import WorkAnalyticsDashboard from '@/app/pages/app/Graph';
-import WorkDisplayComponent from '@/app/pages/app/Card';
-import WorkTableComponent from '@/app/pages/app/Table';
+import { FilterSidebar } from './Sidebar';
+import { AddWorkModal } from '../assets/Modal';
+import { WorkKanban } from '@/app/pages/app/Kanban';
+import { WorkCardView } from '@/app/pages/app/Card';
+import { WorkTableView } from '@/app/pages/app/Table';
+import { WorkGraphView } from '@/app/pages/app/Graph';
 import { ArrowDownGoogle } from '../utils/Icon';
 
 export function WorkNavbar() {
@@ -257,14 +257,14 @@ export function WorkNavbar() {
 
       {showWork && (
         <div className="">
-          <ProjectWorksPage />
+          <WorkKanban />
         </div>
       )}
 
       <div className="mt-6">
-        {selectedView === "chart" && <WorkAnalyticsDashboard />}
-        {selectedView === "card" && <WorkDisplayComponent />}
-        {selectedView === "table" && <WorkTableComponent />}
+        {selectedView === "chart" && <WorkGraphView />}
+        {selectedView === "card" && <WorkCardView />}
+        {selectedView === "table" && <WorkTableView />}
       </div>
 
     </motion.nav>

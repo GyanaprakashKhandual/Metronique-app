@@ -9,7 +9,7 @@ import { ThreeDotsDropdown } from "../assets/Dropdown";
 import ProjectModal from "../assets/Modal";
 import { FaCoffee } from "react-icons/fa";
 import { CalfFolder } from "../utils/Icon";
-
+import { AddProjectModal } from "../assets/Modal";
 const ProjectSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [projects, setProjects] = useState([]);
@@ -425,7 +425,7 @@ const ProjectSidebar = () => {
       {/* Project Modal */}
       <AnimatePresence>
         {modalOpen && (
-          <ProjectModal
+          <AddProjectModal
             type={modalType}
             project={selectedProject}
             token={token}
