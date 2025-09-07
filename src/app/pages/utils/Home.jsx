@@ -7,11 +7,11 @@ import { useRouter } from 'next/navigation';
 
 export default function Homepage() {
 
-    const router = useRouter();
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false)
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], [0, -50])
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
@@ -42,7 +42,7 @@ export default function Homepage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-pink-100">
       {/* Navigation */}
-      <motion.nav 
+      <motion.nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm' : 'bg-transparent'}`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -50,7 +50,7 @@ export default function Homepage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <motion.div 
+            <motion.div
               className="flex items-center space-x-2"
             >
               <FaCoffee className="w-8 h-8 text-blue-900" />
@@ -58,7 +58,7 @@ export default function Homepage() {
                 Metronique
               </span>
             </motion.div>
-            
+
             <div className="hidden md:flex items-center space-x-8">
               <motion.a href="#features" className="text-gray-700 hover:text-purple-600 transition-colors" whileHover={{ scale: 1.1 }}>
                 Documentation
@@ -69,8 +69,8 @@ export default function Homepage() {
               <motion.a href="#contact" className="text-gray-700 hover:text-purple-600 transition-colors" whileHover={{ scale: 1.1 }}>
                 Contact
               </motion.a>
-              <motion.button 
-              onClick={() => router.push('/auth')}
+              <motion.button
+                onClick={() => router.push('/auth')}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all"
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(147, 51, 234, 0.3)" }}
                 whileTap={{ scale: 0.95 }}
@@ -84,12 +84,12 @@ export default function Homepage() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <motion.div 
+        <motion.div
           className="absolute inset-0 bg-gradient-to-r from-purple-400/20 via-blue-400/20 to-pink-400/20"
           style={{ y }}
         />
-        
-        <motion.div 
+
+        <motion.div
           className="relative z-10 text-center max-w-6xl mx-auto px-4"
           variants={containerVariants}
           initial="hidden"
@@ -101,30 +101,30 @@ export default function Homepage() {
           >
             <FaCoffee className="text-6xl text-purple-600 mx-auto mb-6" />
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             variants={itemVariants}
             className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent"
           >
             Meet Metronique
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             variants={itemVariants}
             className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed"
           >
-            The intelligent project management companion that seamlessly integrates with VS Code and GitHub. 
+            The intelligent project management companion that seamlessly integrates with VS Code and GitHub.
             Automatically track, manage, and optimize your daily development workflow with AI-powered insights.
           </motion.p>
-          
-          <motion.div 
+
+          <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <motion.button 
+            <motion.button
               className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl"
-              whileHover={{ 
-                scale: 1.05, 
+              whileHover={{
+                scale: 1.05,
                 boxShadow: "0 20px 40px rgba(147, 51, 234, 0.4)",
                 background: "linear-gradient(45deg, #8B5CF6, #3B82F6, #EC4899)"
               }}
@@ -132,7 +132,7 @@ export default function Homepage() {
             >
               Get Started Free
             </motion.button>
-            <motion.button 
+            <motion.button
               className="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-600 hover:text-white transition-all"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -141,7 +141,7 @@ export default function Homepage() {
             </motion.button>
           </motion.div>
         </motion.div>
-        
+
         {/* Floating Elements */}
         <motion.div
           className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full opacity-20"
@@ -227,8 +227,8 @@ export default function Homepage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ 
-                  scale: 1.02, 
+                whileHover={{
+                  scale: 1.02,
                   boxShadow: "0 20px 40px rgba(147, 51, 234, 0.1)"
                 }}
               >
@@ -289,7 +289,7 @@ export default function Homepage() {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 whileHover={{ y: -5 }}
               >
-                <motion.div 
+                <motion.div
                   className={`absolute inset-0 bg-gradient-to-br ${useCase.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
                 />
                 <useCase.icon className="text-4xl text-gray-700 mb-6" />
@@ -343,11 +343,10 @@ export default function Homepage() {
             ].map((plan, index) => (
               <motion.div
                 key={index}
-                className={`relative p-8 rounded-3xl shadow-lg ${
-                  plan.popular 
-                    ? 'bg-gradient-to-br from-purple-600 to-blue-600 text-white transform scale-105' 
+                className={`relative p-8 rounded-3xl shadow-lg ${plan.popular
+                    ? 'bg-gradient-to-br from-purple-600 to-blue-600 text-white transform scale-105'
                     : 'bg-gradient-to-br from-purple-50 to-blue-50'
-                }`}
+                  }`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -355,7 +354,7 @@ export default function Homepage() {
                 whileHover={{ y: -5 }}
               >
                 {plan.popular && (
-                  <motion.div 
+                  <motion.div
                     className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-1 rounded-full text-sm font-semibold"
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
@@ -363,7 +362,7 @@ export default function Homepage() {
                     Most Popular
                   </motion.div>
                 )}
-                
+
                 <div className="text-center">
                   <h3 className={`text-2xl font-bold mb-2 ${plan.popular ? 'text-white' : 'text-gray-800'}`}>
                     {plan.name}
@@ -374,7 +373,7 @@ export default function Homepage() {
                   <p className={`mb-6 ${plan.popular ? 'text-purple-100' : 'text-gray-600'}`}>
                     {plan.description}
                   </p>
-                  
+
                   <ul className="space-y-3 mb-8">
                     {plan.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className={`flex items-center justify-center ${plan.popular ? 'text-white' : 'text-gray-600'}`}>
@@ -383,13 +382,12 @@ export default function Homepage() {
                       </li>
                     ))}
                   </ul>
-                  
+
                   <motion.button
-                    className={`w-full py-3 rounded-full font-semibold transition-all ${
-                      plan.popular
+                    className={`w-full py-3 rounded-full font-semibold transition-all ${plan.popular
                         ? 'bg-white text-purple-600 hover:bg-gray-100'
                         : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:shadow-lg'
-                    }`}
+                      }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -417,19 +415,19 @@ export default function Homepage() {
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               Join thousands of developers who are already boosting their productivity with Metronique
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <motion.button 
+              <motion.button
                 className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl"
-                whileHover={{ 
-                  scale: 1.05, 
+                whileHover={{
+                  scale: 1.05,
                   boxShadow: "0 20px 40px rgba(147, 51, 234, 0.4)"
                 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Start Free Trial
               </motion.button>
-              <motion.button 
+              <motion.button
                 className="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-600 hover:text-white transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -451,17 +449,17 @@ export default function Homepage() {
                 <span className="text-2xl font-bold">Metronique</span>
               </div>
               <p className="text-gray-400 mb-4 max-w-md">
-                The intelligent project management companion for modern developers. 
+                The intelligent project management companion for modern developers.
                 Streamline your workflow with AI-powered insights and seamless integrations.
               </p>
               <div className="flex space-x-4">
-                <motion.div 
+                <motion.div
                   className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center cursor-pointer"
                   whileHover={{ scale: 1.1, backgroundColor: "#8B5CF6" }}
                 >
                   <FaGithub />
                 </motion.div>
-                <motion.div 
+                <motion.div
                   className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer"
                   whileHover={{ scale: 1.1, backgroundColor: "#3B82F6" }}
                 >
@@ -469,7 +467,7 @@ export default function Homepage() {
                 </motion.div>
               </div>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-gray-400">
@@ -479,7 +477,7 @@ export default function Homepage() {
                 <li><a href="#" className="hover:text-white transition-colors">Changelog</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-gray-400">
@@ -490,7 +488,7 @@ export default function Homepage() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2025 Metronique. All rights reserved.</p>
           </div>
