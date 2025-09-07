@@ -1,5 +1,6 @@
 import React from 'react'
-import ProjectSidebar from '../components/modules/Sidebar';
+import { ProjectSidebar } from '../components/modules/Sidebar';
+
 
 export const metadata = {
   title: "Dashboard - Integrated with code cloud",
@@ -9,7 +10,7 @@ export const metadata = {
 function page() {
   return (
     <div>
-      <ProjectSidebar />
+      <ProjectSidebar/>
     </div>
   )
 }
