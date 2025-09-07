@@ -2,17 +2,17 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, 
-  ChevronDown, 
-  BarChart3, 
-  Grid3X3, 
-  Table, 
-  Trello, 
-  Plus, 
-  Filter, 
-  Settings, 
-  User 
+import {
+  Search,
+  ChevronDown,
+  BarChart3,
+  Grid3X3,
+  Table,
+  Trello,
+  Plus,
+  Filter,
+  Settings,
+  User
 } from 'lucide-react';
 import { getProjectDetails } from '@/app/script/Getproject';
 import { FaCoffee } from 'react-icons/fa';
@@ -24,7 +24,7 @@ import WorkDisplayComponent from '@/app/pages/app/Card';
 import WorkTableComponent from '@/app/pages/app/Table';
 import { ArrowDownGoogle } from '../utils/Icon';
 
-export function WorkNavbar () {
+export function WorkNavbar() {
   const [showWork, setShowWork] = useState(false);
   const [projectData, setProjectData] = useState(null);
   const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
@@ -34,13 +34,13 @@ export function WorkNavbar () {
   const dropdownRef = useRef(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isWorkModalOpen, setIsWorkModalOpen] = useState(false);
- const [selectedView, setSelectedView] = useState("chart");
- 
+  const [selectedView, setSelectedView] = useState("chart");
 
-const handleViewSelect = (option) => {
-  setSelectedView(option.value);
-  setIsViewDropdownOpen(false); // close dropdown after select
-};
+
+  const handleViewSelect = (option) => {
+    setSelectedView(option.value);
+    setIsViewDropdownOpen(false); // close dropdown after select
+  };
 
 
   const toggleFilter = () => {
@@ -52,9 +52,9 @@ const handleViewSelect = (option) => {
       try {
         setLoading(true);
         const data = await getProjectDetails();
-        
+
         console.log("Fetched project data:", data);
-        
+
         if (data) {
           setProjectData(data);
           setError(null);
@@ -68,12 +68,12 @@ const handleViewSelect = (option) => {
         setLoading(false);
       }
     };
-    
+
     // Add a small delay to ensure the component is mounted and URL is available
     const timer = setTimeout(() => {
       fetchProject();
     }, 100);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -98,14 +98,14 @@ const handleViewSelect = (option) => {
   console.log("Navbar state:", { loading, error, projectData });
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
       className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 py-3 h-15 w-full"
     >
       <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
-        
+
         {/* Left Section */}
         <div className="flex items-center space-x-4">
           {/* Coffee Icon */}
@@ -123,7 +123,7 @@ const handleViewSelect = (option) => {
             ) : error ? (
               <div className="text-red-500 text-sm">Error loading project</div>
             ) : projectData ? (
-              <motion.h1 
+              <motion.h1
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
@@ -153,7 +153,7 @@ const handleViewSelect = (option) => {
 
         {/* Right Section - Action Buttons */}
         <div className="flex items-center space-x-2">
-          
+
           {/* View Options Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <motion.button
@@ -165,7 +165,7 @@ const handleViewSelect = (option) => {
               <span className="hidden sm:inline text-sm font-medium">View Options</span>
               <ArrowDownGoogle className={`w-4 h-4 transition-transform duration-200 ${isViewDropdownOpen ? 'rotate-180' : ''}`} />
             </motion.button>
-            
+
             <AnimatePresence>
               {isViewDropdownOpen && (
                 <motion.div
@@ -193,19 +193,19 @@ const handleViewSelect = (option) => {
 
           {/* Kanban Button */}
           <motion.button
-  onClick={() => setShowWork((prev) => !prev)}
-  whileHover={{ scale: 1.02 }}
-  whileTap={{ scale: 0.98 }}
-  className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
->
-  <Trello className="w-4 h-4" />
-  <span className="hidden sm:inline text-sm font-medium">Kanban</span>
-</motion.button>
+            onClick={() => setShowWork((prev) => !prev)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+          >
+            <Trello className="w-4 h-4" />
+            <span className="hidden sm:inline text-sm font-medium">Kanban</span>
+          </motion.button>
 
 
           {/* Add Work Button */}
           <motion.button
-          onClick={() => setIsWorkModalOpen(true)}
+            onClick={() => setIsWorkModalOpen(true)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm"
@@ -216,13 +216,13 @@ const handleViewSelect = (option) => {
 
           {/* Filter Button */}
           <motion.button
-          onClick={toggleFilter}
+            onClick={toggleFilter}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="p-2 bg-white border border-blue-100 rounded-lg hover:shadow-md transition-shadow duration-200"
           >
             <Filter
-            className="w-4 h-4 text-gray-600" />
+              className="w-4 h-4 text-gray-600" />
           </motion.button>
 
           {/* Settings Button */}
@@ -247,28 +247,28 @@ const handleViewSelect = (option) => {
 
 
       <FilterSidebar
-       isOpen={isFilterOpen} 
-        onClose={() => setIsFilterOpen(false)} 
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
       />
       <AddWorkModal
-      isOpen={isWorkModalOpen} 
-        onClose={() => setIsWorkModalOpen(false)} 
+        isOpen={isWorkModalOpen}
+        onClose={() => setIsWorkModalOpen(false)}
       />
 
-       {showWork && (
+      {showWork && (
         <div className="">
           <ProjectWorksPage />
         </div>
       )}
 
       <div className="mt-6">
-  {selectedView === "chart" && <WorkAnalyticsDashboard />}
-  {selectedView === "card" && <WorkDisplayComponent />}
-  {selectedView === "table" && <WorkTableComponent />}
-</div>
+        {selectedView === "chart" && <WorkAnalyticsDashboard />}
+        {selectedView === "card" && <WorkDisplayComponent />}
+        {selectedView === "table" && <WorkTableComponent />}
+      </div>
 
     </motion.nav>
-    
+
   );
 };
 
