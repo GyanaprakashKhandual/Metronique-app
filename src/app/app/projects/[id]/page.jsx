@@ -2,6 +2,7 @@
 import ProjectNavbar from "@/app/components/modules/Navbar";
 import WorkDisplayComponent from "@/app/pages/app/Card";
 import ProjectWorksPage from "@/app/pages/app/Kanban";
+import WorkTableComponent from "@/app/pages/app/Table";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
@@ -70,7 +71,7 @@ export default async function ProjectPage({ params }) {
     return (
       <div className="">
         <ProjectNavbar/>
-        <WorkDisplayComponent/>
+        <WorkTableComponent/>
       </div>
     );
   } catch (error) {
