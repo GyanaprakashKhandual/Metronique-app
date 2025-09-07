@@ -136,9 +136,8 @@ const Error = ({
         <div className="text-center">
           <motion.div
             variants={iconVariants}
-            className={`flex justify-center mb-6 ${
-              theme === "dark" ? "text-red-400" : "text-red-500"
-            }`}
+            className={`flex justify-center mb-6 ${theme === "dark" ? "text-red-400" : "text-red-500"
+              }`}
           >
             {getIcon()}
           </motion.div>
@@ -150,9 +149,8 @@ const Error = ({
           </motion.h1>
           <motion.p
             variants={itemVariants}
-            className={`text-lg mb-8 max-w-md ${
-              theme === "dark" ? "text-gray-300" : "text-gray-600"
-            }`}
+            className={`text-lg mb-8 max-w-md ${theme === "dark" ? "text-gray-300" : "text-gray-600"
+              }`}
           >
             {title}
           </motion.p>
@@ -187,32 +185,28 @@ const Error = ({
       >
         <motion.div
           variants={iconVariants}
-          className={`flex justify-center mb-6 ${
-            theme === "dark" ? "text-red-400" : "text-red-500"
-          }`}
+          className={`flex justify-center mb-6 ${theme === "dark" ? "text-red-400" : "text-red-500"
+            }`}
         >
           {getIcon()}
         </motion.div>
 
         <motion.div variants={itemVariants} className="text-center mb-6">
           <h1
-            className={`text-6xl font-bold mb-2 ${
-              theme === "dark" ? "text-gray-100" : "text-gray-900"
-            }`}
+            className={`text-6xl font-bold mb-2 ${theme === "dark" ? "text-gray-100" : "text-gray-900"
+              }`}
           >
             {errorCode}
           </h1>
           <h2
-            className={`text-2xl font-semibold mb-4 ${
-              theme === "dark" ? "text-gray-200" : "text-gray-800"
-            }`}
+            className={`text-2xl font-semibold mb-4 ${theme === "dark" ? "text-gray-200" : "text-gray-800"
+              }`}
           >
             {title}
           </h2>
           <p
-            className={`${
-              theme === "dark" ? "text-gray-400" : "text-gray-600"
-            } leading-relaxed`}
+            className={`${theme === "dark" ? "text-gray-400" : "text-gray-600"
+              } leading-relaxed`}
           >
             {description}
           </p>
@@ -270,14 +264,12 @@ const Error = ({
         {variant === "detailed" && (
           <motion.div
             variants={itemVariants}
-            className={`mt-6 pt-6 border-t ${
-              theme === "dark" ? "border-gray-700" : "border-gray-200"
-            }`}
+            className={`mt-6 pt-6 border-t ${theme === "dark" ? "border-gray-700" : "border-gray-200"
+              }`}
           >
             <p
-              className={`text-sm ${
-                theme === "dark" ? "text-gray-500" : "text-gray-500"
-              }`}
+              className={`text-sm ${theme === "dark" ? "text-gray-500" : "text-gray-500"
+                }`}
             >
               If the problem persists, please contact support or try again
               later.

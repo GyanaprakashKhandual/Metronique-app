@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Plus, 
-  Calendar, 
-  User, 
-  Clock, 
-  AlertCircle, 
-  CheckCircle2, 
-  Pause, 
+import {
+  Plus,
+  Calendar,
+  User,
+  Clock,
+  AlertCircle,
+  CheckCircle2,
+  Pause,
   X,
   ExternalLink,
   Edit3,
@@ -19,32 +19,32 @@ import {
 } from "lucide-react";
 
 const statusConfig = {
-  "TODO": { 
-    color: "bg-slate-100 text-slate-700", 
+  "TODO": {
+    color: "bg-slate-100 text-slate-700",
     icon: Clock,
     borderColor: "border-slate-200",
     bgGradient: "from-slate-50 to-slate-100"
   },
-  "In Progress": { 
-    color: "bg-blue-100 text-blue-700", 
+  "In Progress": {
+    color: "bg-blue-100 text-blue-700",
     icon: AlertCircle,
     borderColor: "border-blue-200",
     bgGradient: "from-blue-50 to-blue-100"
   },
-  "Completed": { 
-    color: "bg-green-100 text-green-700", 
+  "Completed": {
+    color: "bg-green-100 text-green-700",
     icon: CheckCircle2,
     borderColor: "border-green-200",
     bgGradient: "from-green-50 to-green-100"
   },
-  "On Hold": { 
-    color: "bg-yellow-100 text-yellow-700", 
+  "On Hold": {
+    color: "bg-yellow-100 text-yellow-700",
     icon: Pause,
     borderColor: "border-yellow-200",
     bgGradient: "from-yellow-50 to-yellow-100"
   },
-  "Removed": { 
-    color: "bg-red-100 text-red-700", 
+  "Removed": {
+    color: "bg-red-100 text-red-700",
     icon: X,
     borderColor: "border-red-200",
     bgGradient: "from-red-50 to-red-100"
@@ -57,7 +57,7 @@ const priorityConfig = {
   "Low": "text-green-600 bg-green-50 border-green-200"
 };
 
-export default function ProjectWorksPage() {
+const WorkKanban = () => {
   const [works, setWorks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -72,7 +72,7 @@ export default function ProjectWorksPage() {
         // Extract projectId from URL
         const pathSegments = window.location.pathname.split("/");
         const projectId = pathSegments[pathSegments.length - 1];
-        
+
         if (!projectId) throw new Error("Project ID not found in URL");
 
         // Get token from localStorage
@@ -84,7 +84,7 @@ export default function ProjectWorksPage() {
           `http://localhost:5000/api/v1/work/${projectId}`,
           {
             method: 'GET',
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
             },
@@ -112,15 +112,15 @@ export default function ProjectWorksPage() {
       setIsUpdating(true);
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found in localStorage");
-      
+
       const pathSegments = window.location.pathname.split("/");
       const projectId = pathSegments[pathSegments.length - 1];
-      
+
       const response = await fetch(
         `http://localhost:5000/api/v1/work/${projectId}/${workId}`,
         {
           method: 'PUT',
-          headers: { 
+          headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
@@ -133,16 +133,16 @@ export default function ProjectWorksPage() {
       }
 
       // Update local state to reflect the change
-      setWorks(prev => prev.map(work => 
-        work._id === workId 
+      setWorks(prev => prev.map(work =>
+        work._id === workId
           ? { ...work, status: newStatus }
           : work
       ));
     } catch (err) {
       setError(err.message || "Failed to update work status");
       // Revert the change in UI if API call fails
-      setWorks(prev => prev.map(work => 
-        work._id === workId 
+      setWorks(prev => prev.map(work =>
+        work._id === workId
           ? { ...work, status: draggedItem.status }
           : work
       ));
@@ -155,18 +155,18 @@ export default function ProjectWorksPage() {
   const deleteWork = async (workId) => {
     try {
       if (!confirm("Are you sure you want to delete this work item?")) return;
-      
+
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Token not found in localStorage");
-      
+
       const pathSegments = window.location.pathname.split("/");
       const projectId = pathSegments[pathSegments.length - 1];
-      
+
       const response = await fetch(
         `http://localhost:5000/api/v1/work/${projectId}/${workId}`,
         {
           method: 'DELETE',
-          headers: { 
+          headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
@@ -187,7 +187,7 @@ export default function ProjectWorksPage() {
   // Filter works
   const filteredWorks = works.filter(work => {
     const matchesSearch = work.workType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         work.workDesc.toLowerCase().includes(searchTerm.toLowerCase());
+      work.workDesc.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPriority = !selectedPriority || work.priority === selectedPriority;
     return matchesSearch && matchesPriority;
   });
@@ -223,7 +223,7 @@ export default function ProjectWorksPage() {
 
   const calculateTotalHours = (work) => {
     if (!work.timeLogs || work.timeLogs.length === 0) return "0h";
-    
+
     const totalMinutes = work.timeLogs.reduce((total, log) => {
       if (log.startTime && log.endTime) {
         const start = new Date(log.startTime);
@@ -232,17 +232,17 @@ export default function ProjectWorksPage() {
       }
       return total;
     }, 0);
-    
+
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
-    
+
     return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <motion.div 
+        <motion.div
           className="flex space-x-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -274,7 +274,7 @@ export default function ProjectWorksPage() {
           {Object.entries(statusConfig).map(([status, config], index) => {
             const Icon = config.icon;
             const statusWorks = groupedWorks[status] || [];
-            
+
             return (
               <motion.div
                 key={status}
@@ -324,7 +324,7 @@ export default function ProjectWorksPage() {
                             <button className="p-1 hover:bg-gray-100 rounded">
                               <Edit3 className="w-3 h-3 text-gray-500" />
                             </button>
-                            <button 
+                            <button
                               className="p-1 hover:bg-gray-100 rounded"
                               onClick={() => deleteWork(work._id)}
                             >
@@ -407,3 +407,5 @@ export default function ProjectWorksPage() {
     </div>
   );
 }
+
+export { WorkKanban };
