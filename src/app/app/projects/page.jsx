@@ -37,7 +37,7 @@ export default async function ProjectPage({ params }) {
     const project = await getProjectById(id);
 
     return (
-      <div className="p-6">
+      <div className="">
         <h1 className="text-3xl font-bold">{project.projectName}</h1>
         <p className="mt-4 text-gray-700">{project.projectDesc}</p>
         <p className="mt-2 text-sm text-gray-500">

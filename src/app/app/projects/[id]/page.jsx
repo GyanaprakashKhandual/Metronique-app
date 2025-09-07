@@ -1,9 +1,5 @@
-// app/projects/[id]/page.jsx
-import ProjectNavbar from "@/app/components/modules/Navbar";
-import WorkDisplayComponent from "@/app/pages/app/Card";
-import WorkAnalyticsDashboard from "@/app/pages/app/Graph";
-import ProjectWorksPage from "@/app/pages/app/Kanban";
-import WorkTableComponent from "@/app/pages/app/Table";
+
+import { WorkNavbar } from "@/app/components/modules/Navbar";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +19,6 @@ async function getProjectById(id) {
   });
 
   if (!res.ok) {
-    console.error("API failed:", res.status, res.statusText);
 
     if (res.status === 401) {
       throw new Error("Unauthorized: Please log in");
@@ -33,9 +28,6 @@ async function getProjectById(id) {
   }
 
   const result = await res.json();
-  console.log("API raw result:", result);
-
-  // ✅ Fix: Return project and works separately
   return {
     project: result.project,
     works: result.works || [],
@@ -54,7 +46,6 @@ export async function generateMetadata({ params }) {
       description: project?.projectDesc || "Project details page",
     };
   } catch (error) {
-    console.error("Error generating metadata:", error);
     return {
       title: "Project",
       description: "Project details page",
@@ -67,11 +58,11 @@ export default async function ProjectPage({ params }) {
 
   try {
     const { project, works } = await getProjectById(id);
-    console.log("Parsed project data:", project, works);
+    
 
     return (
-      <div className="">
-        <ProjectNavbar/>
+      <div>
+        <WorkNavbar/>
       </div>
     );
   } catch (error) {

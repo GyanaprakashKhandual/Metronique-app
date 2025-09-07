@@ -24,7 +24,7 @@ import WorkDisplayComponent from '@/app/pages/app/Card';
 import WorkTableComponent from '@/app/pages/app/Table';
 import { ArrowDownGoogle } from '../utils/Icon';
 
-const ProjectNavbar = () => {
+export function WorkNavbar () {
   const [showWork, setShowWork] = useState(false);
   const [projectData, setProjectData] = useState(null);
   const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
@@ -272,4 +272,3 @@ const handleViewSelect = (option) => {
   );
 };
 
-export default ProjectNavbar;

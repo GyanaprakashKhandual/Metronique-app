@@ -27,5 +27,19 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "tailwindcss": "^4"
-  }
+  },
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GyanaprakashKhandual/Metronique-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/GyanaprakashKhandual/Metronique-app/issues"
+  },
+  "homepage": "https://github.com/GyanaprakashKhandual/Metronique-app#readme"
 }
