@@ -203,6 +203,8 @@ export function WorkNavbar() {
           </motion.button>
 
 
+
+
           {/* Add Work Button */}
           <motion.button
             onClick={() => setIsWorkModalOpen(true)}
@@ -244,7 +246,11 @@ export function WorkNavbar() {
           </motion.button>
         </div>
       </div>
-
+      <div className="mt-6">
+        {selectedView === "chart" && <WorkGraphView />}
+        {selectedView === "card" && <WorkCardView />}
+        {selectedView === "table" && <WorkTableView />}
+      </div>
 
       <FilterSidebar
         isOpen={isFilterOpen}
@@ -261,13 +267,8 @@ export function WorkNavbar() {
         </div>
       )}
 
-      <div className="mt-6">
-        {selectedView === "chart" && <WorkGraphView />}
-        {selectedView === "card" && <WorkCardView />}
-        {selectedView === "table" && <WorkTableView />}
-      </div>
-
     </motion.nav>
+
 
   );
 };

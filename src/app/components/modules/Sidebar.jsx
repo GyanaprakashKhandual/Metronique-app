@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Plus, User, LogOut, Mail, ChevronUp, X, Filter, Calendar, Clock, Tag, Link, FileText, Search, } from "lucide-react";
-import { ThreeDotsDropdown } from "../assets/Dropdown";
+import { Plus, User, LogOut, Mail, ChevronUp, X, Filter, Calendar, Clock, Tag, Link, FileText, Search, ChevronRight, } from "lucide-react";
+import { FilterDropdown, ThreeDotsDropdown } from "../assets/Dropdown";
 import ProjectModal from "../assets/Modal";
 import { FaCoffee } from "react-icons/fa";
 import { CalfFolder } from "../utils/Icon";
@@ -694,7 +694,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                   onToggle={() => toggleSection('status')}
                   hasValue={!!filters.status}
                 >
-                  <CustomDropdown
+                  <FilterDropdown
                     value={filters.status}
                     onChange={(value) => handleFilterChange('status', value)}
                     options={statusOptions}
@@ -710,7 +710,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                   onToggle={() => toggleSection('priority')}
                   hasValue={!!filters.priority}
                 >
-                  <CustomDropdown
+                  <FilterDropdown
                     value={filters.priority}
                     onChange={(value) => handleFilterChange('priority', value)}
                     options={priorityOptions}
@@ -806,7 +806,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                   onToggle={() => toggleSection('totalTime')}
                   hasValue={!!filters.totalTimeRange}
                 >
-                  <CustomDropdown
+                  <FilterDropdown
                     value={filters.totalTimeRange}
                     onChange={(value) => handleFilterChange('totalTimeRange', value)}
                     options={timeRangeOptions}
@@ -822,7 +822,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                   onToggle={() => toggleSection('workLink')}
                   hasValue={!!filters.hasLink}
                 >
-                  <CustomDropdown
+                  <FilterDropdown
                     value={filters.hasLink}
                     onChange={(value) => handleFilterChange('hasLink', value)}
                     options={linkOptions}
@@ -838,7 +838,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                   onToggle={() => toggleSection('files')}
                   hasValue={!!filters.hasFiles}
                 >
-                  <CustomDropdown
+                  <FilterDropdown
                     value={filters.hasFiles}
                     onChange={(value) => handleFilterChange('hasFiles', value)}
                     options={fileOptions}
