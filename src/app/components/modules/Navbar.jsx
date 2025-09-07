@@ -19,6 +19,9 @@ import { FaCoffee } from 'react-icons/fa';
 import FilterSidebar from './Modal';
 import AddWorkModal from './Add';
 import ProjectWorksPage from '@/app/pages/app/Kanban';
+import WorkAnalyticsDashboard from '@/app/pages/app/Graph';
+import WorkDisplayComponent from '@/app/pages/app/Card';
+import WorkTableComponent from '@/app/pages/app/Table';
 
 const ProjectNavbar = () => {
   const [showWork, setShowWork] = useState(false);
@@ -30,6 +33,13 @@ const ProjectNavbar = () => {
   const dropdownRef = useRef(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isWorkModalOpen, setIsWorkModalOpen] = useState(false);
+ const [selectedView, setSelectedView] = useState("chart");
+ 
+
+const handleViewSelect = (option) => {
+  setSelectedView(option.value);
+  setIsViewDropdownOpen(false); // close dropdown after select
+};
 
 
   const toggleFilter = () => {
@@ -82,10 +92,6 @@ const ProjectNavbar = () => {
     { icon: Table, label: 'Table View', value: 'table' }
   ];
 
-  const handleViewSelect = (option) => {
-    console.log('Selected view:', option.value);
-    setIsViewDropdownOpen(false);
-  };
 
   // Debug: Log the current state
   console.log("Navbar state:", { loading, error, projectData });
@@ -272,6 +278,13 @@ const ProjectNavbar = () => {
           <ProjectWorksPage />
         </div>
       )}
+
+      <div className="mt-6">
+  {selectedView === "chart" && <WorkAnalyticsDashboard />}
+  {selectedView === "card" && <WorkDisplayComponent />}
+  {selectedView === "table" && <WorkTableComponent />}
+</div>
+
     </motion.nav>
     
   );
