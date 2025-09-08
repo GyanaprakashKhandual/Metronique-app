@@ -236,9 +236,8 @@ export function WorkNavbar() {
             onClick={() => window.location.reload()}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm"
+            className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 shadow-sm"
           >
-            <RefreshCcw className="w-4 h-4" />
             <span className="hidden md:inline text-sm font-medium">Refresh</span>
           </motion.button>
         </div>
