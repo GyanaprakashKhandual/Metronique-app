@@ -203,6 +203,15 @@ export function WorkNavbar() {
             <span className="hidden md:inline text-sm font-medium">Add Work</span>
           </motion.button>
 
+          {/* Add Sub Work */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center space-x-2 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-600 transition-colors duration-200 shadow-sm"
+          >
+            <Plus className='h-4 w-4'/>
+            <span className="hidden md:inline text-sm font-medium">Add Sub Work</span>
+          </motion.button>
           {/* Filter */}
           <motion.button
             onClick={toggleFilter}
