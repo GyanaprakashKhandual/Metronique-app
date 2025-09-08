@@ -925,7 +925,7 @@ const SubWorkSidebar = () => {
         work.priority.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredWorks(filtered);
-    }
+    } 
   }, [searchTerm, works]);
 
   const handleWorkItemClick = (workId) => {
@@ -955,7 +955,7 @@ const SubWorkSidebar = () => {
   };
 
   return (
-    <div className="w-80 h-screen bg-white border-r border-gray-200 flex flex-col overflow-hidden">
+    <div className="w-80 h-screen bg-white border-r border-gray-200 flex flex-col sticky top-0">
       {/* Project Header */}
       <div className="p-5 border-b border-gray-200">
         <motion.h2 

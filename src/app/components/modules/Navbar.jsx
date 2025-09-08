@@ -402,7 +402,7 @@ export function SubWorkNavbar() {
   }, []);
 
   return (
-    <motion.nav className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 pt-2 pb-2 h-15">
+    <motion.nav className="w-[calc(100vw-320px)] bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 pt-2 pb-2 h-15 sticky top-0">
       <div className="flex items-center justify-between">
         
         {/* Left Section */}
@@ -492,17 +492,6 @@ export function SubWorkNavbar() {
             className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm"
           >
             <Plus className="w-4 h-4" />
-            <span className="hidden md:inline text-sm font-medium">Add Work</span>
-          </motion.button>
-
-          {/* Add Sub Work */}
-          <motion.button
-          onClick={() => router.push(`/app/projects/${project.project._id}/sub-work`)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center space-x-2 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-600 transition-colors duration-200 shadow-sm"
-          >
-            <Plus className='h-4 w-4'/>
             <span className="hidden md:inline text-sm font-medium">Add Sub Work</span>
           </motion.button>
           {/* Filter */}
