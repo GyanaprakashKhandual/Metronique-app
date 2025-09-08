@@ -5,11 +5,14 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Plus, User, LogOut, Mail, ChevronUp, X, Filter, Calendar, Clock, Tag, Link, FileText, Search, ChevronRight, } from "lucide-react";
+import { FiSearch, FiClipboard, FiClock } from 'react-icons/fi';
+import { getProjectDetails } from "@/app/script/GetProjectS";
 import { FilterDropdown, ThreeDotsDropdown } from "../assets/Dropdown";
-import ProjectModal from "../assets/Modal";
 import { FaCoffee } from "react-icons/fa";
 import { CalfFolder } from "../utils/Icon";
 import { AddProjectModal } from "../assets/Modal";
+
+
 const ProjectSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [projects, setProjects] = useState([]);
@@ -309,23 +312,6 @@ const ProjectSidebar = () => {
                               setModalType("edit");
                               setModalOpen(true);
                             },
-                          },
-                          {
-                            label: "Configure",
-                            icon: <svg
-                              width="16"
-                              height="16"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle cx="12" cy="12" r="3" />
-                              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c0 .7.4 1.31 1 1.51.62.22 1.31.09 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.42.51-.55 1.2-.33 1.82.20.6.81 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.7 0-1.31.4-1.51 1z" />
-                            </svg>
-
                           },
                           {
                             label: "Workspace",
@@ -877,5 +863,184 @@ const FilterSidebar = ({ isOpen, onClose }) => {
 }
 
 
+const SubWorkSidebar = () => {
+  // Retrieve token from localStorage
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const [project, setProject] = useState(null);
+  const [works, setWorks] = useState([]);
+  const [filteredWorks, setFilteredWorks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedWorkId, setSelectedWorkId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-export { ProjectSidebar, FilterSidebar };
+  // Fetch project details
+  useEffect(() => {
+    const fetchProject = async () => {
+      const details = await getProjectDetails();
+      if (details) {
+        setProject(details);
+      }
+    };
+
+    fetchProject();
+  }, []);
+
+  // Fetch works based on project ID
+  useEffect(() => {
+    const fetchWorks = async () => {
+      if (project?.project?._id) {
+        setIsLoading(true);
+        try {
+          const response = await fetch(`http://localhost:5000/api/v1/work/${project.project._id}`, {
+            headers: {
+              'Authorization': token ? `Bearer ${token}` : '',
+              'Content-Type': 'application/json',
+            },
+          });
+          const data = await response.json();
+          const worksArray = Array.isArray(data.works) ? data.works : [];
+          setWorks(worksArray);
+          setFilteredWorks(worksArray);
+        } catch (error) {
+          console.error('Error fetching works:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchWorks();
+  }, [project]);
+
+  // Filter works based on search term
+  useEffect(() => {
+    if (searchTerm === '') {
+      setFilteredWorks(works);
+    } else {
+      const filtered = works.filter(work => 
+        work.workType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        work.workDesc.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        work.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        work.priority.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredWorks(filtered);
+    }
+  }, [searchTerm, works]);
+
+  // Handle work item selection
+  const handleWorkItemClick = (workId) => {
+    setSelectedWorkId(workId);
+    // You can add additional logic here for what happens when a work item is selected
+    console.log('Selected work ID:', workId);
+  };
+
+  // Get priority color
+  const getPriorityColor = (priority) => {
+    switch (priority.toLowerCase()) {
+      case 'high': return 'bg-red-100 text-red-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  // Get status color
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'in progress': return 'bg-blue-100 text-blue-800';
+      case 'completed': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-purple-100 text-purple-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="w-80 h-screen bg-white border-r border-gray-200 flex flex-col overflow-hidden">
+      {/* Project Header */}
+      <div className="p-5 border-b border-gray-200">
+        <motion.h2 
+          className="text-xl font-semibold text-gray-800 mb-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {project?.project?.projectName || 'Project'}
+        </motion.h2>
+        
+        {/* Search Bar */}
+        <motion.div 
+          className="relative"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <FiSearch className="absolute left-3 top-3 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search works..."
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </motion.div>
+      </div>
+
+      {/* Works List */}
+      <div className="flex-1 overflow-y-auto p-5">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          </div>
+        ) : filteredWorks.length === 0 ? (
+          <div className="text-center py-10 text-gray-500">
+            {searchTerm ? 'No matching works found' : 'No works available'}
+          </div>
+        ) : (
+          <AnimatePresence>
+            {Array.isArray(filteredWorks) && filteredWorks.map((work, index) => (
+              <motion.div
+                key={work._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className={`mb-4 p-4 border rounded-lg cursor-pointer transition-all duration-200 ${
+                  selectedWorkId === work._id 
+                    ? 'border-blue-500 bg-blue-50 shadow-md' 
+                    : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                }`}
+                onClick={() => handleWorkItemClick(work._id)}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-medium text-gray-800 flex items-center">
+                    <FiClipboard className="mr-2 text-blue-500" />
+                    {work.workType}
+                  </h3>
+                  <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(work.priority)}`}>
+                    {work.priority}
+                  </span>
+                </div>
+                
+                <p className="text-sm text-gray-600 mb-3">{work.workDesc}</p>
+                
+                <div className="flex justify-between items-center">
+                  <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(work.status)}`}>
+                    {work.status}
+                  </span>
+                  
+                  <div className="flex items-center text-xs text-gray-500">
+                    <FiClock className="mr-1" />
+                    {new Date(work.startDate).toLocaleDateString()} - {new Date(work.endDate).toLocaleDateString()}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+export { ProjectSidebar, FilterSidebar, SubWorkSidebar };

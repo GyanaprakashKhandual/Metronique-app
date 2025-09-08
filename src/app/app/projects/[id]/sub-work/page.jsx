@@ -1,8 +1,11 @@
+import { SubWorkSidebar } from '@/app/components/modules/Sidebar'
 import React from 'react'
 
 function page() {
   return (
-    <div>page</div>
+    <div>
+      <SubWorkSidebar/>
+    </div>
   )
 }
 
