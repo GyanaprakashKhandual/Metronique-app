@@ -36,25 +36,43 @@ export function WorkNavbar() {
   const [isWorkModalOpen, setIsWorkModalOpen] = useState(false);
   const [selectedView, setSelectedView] = useState("chart");
 
+  // Options list
+  const viewOptions = [
+    { icon: BarChart3, label: 'Chart View', value: 'chart' },
+    { icon: Grid3X3, label: 'Card View', value: 'card' },
+    { icon: Table, label: 'Table View', value: 'table' },
+    { icon: Trello, label: 'Kanban', value: 'kanban' }, // fixed lowercase
+  ];
+
+  // Load saved view from localStorage on mount
+  useEffect(() => {
+    const savedView = localStorage.getItem("selectedView");
+    if (savedView) {
+      setSelectedView(savedView);
+    }
+  }, []);
+
+  // Save to localStorage whenever view changes
+  useEffect(() => {
+    if (selectedView) {
+      localStorage.setItem("selectedView", selectedView);
+    }
+  }, [selectedView]);
 
   const handleViewSelect = (option) => {
     setSelectedView(option.value);
     setIsViewDropdownOpen(false);
   };
 
-
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen)
-  }
+  };
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
         setLoading(true);
         const data = await getProjectDetails();
-
-        console.log("Fetched project data:", data);
-
         if (data) {
           setProjectData(data);
           setError(null);
@@ -68,12 +86,9 @@ export function WorkNavbar() {
         setLoading(false);
       }
     };
-
-    // Add a small delay to ensure the component is mounted and URL is available
     const timer = setTimeout(() => {
       fetchProject();
     }, 100);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -87,14 +102,8 @@ export function WorkNavbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const viewOptions = [
-    { icon: BarChart3, label: 'Chart View', value: 'chart' },
-    { icon: Grid3X3, label: 'Card View', value: 'card' },
-    { icon: Table, label: 'Table View', value: 'table' },
-    { icon: Trello, label: 'Kanban', value: 'Kanban'},
-  ];
-
-
+  // Find label for current view
+  const currentViewLabel = viewOptions.find(v => v.value === selectedView)?.label || "Options";
 
   return (
     <motion.nav
@@ -107,15 +116,9 @@ export function WorkNavbar() {
 
         {/* Left Section */}
         <div className="flex items-center space-x-4">
-          {/* Coffee Icon */}
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <motion.div whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.95 }}>
             <FaCoffee className="w-8 h-8 text-blue-900" />
           </motion.div>
-
-          {/* Project Name */}
           <div className="hidden sm:block">
             {loading ? (
               <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
@@ -136,7 +139,7 @@ export function WorkNavbar() {
           </div>
         </div>
 
-        {/* Center Section - Search Bar */}
+        {/* Center Section - Search */}
         <div className="flex-1 max-w-lg mx-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -150,9 +153,8 @@ export function WorkNavbar() {
           </div>
         </div>
 
-        {/* Right Section - Action Buttons */}
+        {/* Right Section */}
         <div className="flex items-center space-x-2">
-
           {/* View Options Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <motion.button
@@ -161,7 +163,7 @@ export function WorkNavbar() {
               onClick={() => setIsViewDropdownOpen(!isViewDropdownOpen)}
               className="flex items-center space-x-2 px-3 py-2 bg-white border border-blue-100 rounded-lg hover:shadow-md transition-shadow duration-200 text-gray-700"
             >
-              <span className="hidden sm:inline text-sm font-medium">View Options</span>
+              <span className="hidden sm:inline text-sm font-medium">View: {currentViewLabel}</span>
               <ArrowDownGoogle className={`w-4 h-4 transition-transform duration-200 ${isViewDropdownOpen ? 'rotate-180' : ''}`} />
             </motion.button>
 
@@ -190,10 +192,7 @@ export function WorkNavbar() {
             </AnimatePresence>
           </div>
 
-
-
-
-          {/* Add Work Button */}
+          {/* Add Work */}
           <motion.button
             onClick={() => setIsWorkModalOpen(true)}
             whileHover={{ scale: 1.02 }}
@@ -204,18 +203,17 @@ export function WorkNavbar() {
             <span className="hidden md:inline text-sm font-medium">Add Work</span>
           </motion.button>
 
-          {/* Filter Button */}
+          {/* Filter */}
           <motion.button
             onClick={toggleFilter}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="p-2 bg-white border border-blue-100 rounded-lg hover:shadow-md transition-shadow duration-200"
           >
-            <Filter
-              className="w-4 h-4 text-gray-600" />
+            <Filter className="w-4 h-4 text-gray-600" />
           </motion.button>
 
-          {/* Settings Button */}
+          {/* Settings */}
           <motion.button
             whileHover={{ scale: 1.05, rotate: 45 }}
             whileTap={{ scale: 0.95 }}
@@ -224,7 +222,7 @@ export function WorkNavbar() {
             <Settings className="w-4 h-4 text-gray-600" />
           </motion.button>
 
-          {/* Profile Button */}
+          {/* Profile */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -233,38 +231,29 @@ export function WorkNavbar() {
             <User className="w-4 h-4 text-gray-600" />
           </motion.button>
 
-          {/* Refresh Button*/}
-          {/* Add Work Button */}
+          {/* Refresh */}
           <motion.button
-            onClick={() => setIsWorkModalOpen(true)}
+            onClick={() => window.location.reload()}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm"
           >
             <RefreshCcw className="w-4 h-4" />
-            <span className="hidden md:inline text-sm font-medium">Add Work</span>
+            <span className="hidden md:inline text-sm font-medium">Refresh</span>
           </motion.button>
         </div>
       </div>
+
+      {/* Views */}
       <div className="mt-6">
         {selectedView === "chart" && <WorkGraphView />}
         {selectedView === "card" && <WorkCardView />}
         {selectedView === "table" && <WorkTableView />}
-        {selectedView === "kanban" && <WorkKanban/>}
+        {selectedView === "kanban" && <WorkKanban />}
       </div>
 
-      <FilterSidebar
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-      />
-      <AddWorkModal
-        isOpen={isWorkModalOpen}
-        onClose={() => setIsWorkModalOpen(false)}
-      />
-
+      <FilterSidebar isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+      <AddWorkModal isOpen={isWorkModalOpen} onClose={() => setIsWorkModalOpen(false)} />
     </motion.nav>
-
-
   );
-};
-
+}
