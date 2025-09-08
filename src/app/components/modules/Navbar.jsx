@@ -25,6 +25,7 @@ import { WorkCardView } from '@/app/pages/app/Card';
 import { WorkTableView } from '@/app/pages/app/Table';
 import { WorkGraphView } from '@/app/pages/app/Graph';
 import { ArrowDownGoogle } from '../utils/Icon';
+import { getProjectDetailsForSubWork } from '@/app/script/GetProjectS';
 
 export function WorkNavbar() {
   const [projectData, setProjectData] = useState(null);
@@ -285,3 +286,5 @@ export function WorkNavbar() {
     </motion.nav>
   );
 }
+
+

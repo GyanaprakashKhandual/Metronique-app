@@ -6,11 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Plus, User, LogOut, Mail, ChevronUp, X, Filter, Calendar, Clock, Tag, Link, FileText, Search, ChevronRight, } from "lucide-react";
 import { FiSearch, FiClipboard, FiClock } from 'react-icons/fi';
-import { getProjectDetails } from "@/app/script/GetProjectS";
+import { getProjectDetailsForSubWork } from "@/app/script/GetProjectS";
 import { FilterDropdown, ThreeDotsDropdown } from "../assets/Dropdown";
 import { FaCoffee } from "react-icons/fa";
 import { CalfFolder } from "../utils/Icon";
 import { AddProjectModal } from "../assets/Modal";
+import { getProjectDetails } from "@/app/script/Getproject";
 
 
 const ProjectSidebar = () => {

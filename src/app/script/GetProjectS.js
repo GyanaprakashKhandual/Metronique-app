@@ -4,7 +4,7 @@ import axios from "axios";
  * Fetch project details using projectId from current URL
  * @returns {Promise<Object|null>} project details or null
  */
-export const getProjectDetails = async () => {
+export const getProjectDetailsForSubWork = async () => {
   try {
     // 1. Extract projectId from current URL
     const pathSegments = window.location.pathname.split("/");
