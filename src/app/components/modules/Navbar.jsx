@@ -12,7 +12,8 @@ import {
   Plus,
   Filter,
   Settings,
-  User
+  User,
+  RefreshCcw
 } from 'lucide-react';
 import { getProjectDetails } from '@/app/script/Getproject';
 import { FaCoffee } from 'react-icons/fa';
@@ -94,17 +95,15 @@ export function WorkNavbar() {
   ];
 
 
-  // Debug: Log the current state
-  console.log("Navbar state:", { loading, error, projectData });
 
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 py-3 h-15 w-full"
+      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 pt-2 pb-2 h-15 w-full"
     >
-      <div className="flex items-center justify-between w-full max-w-7xl mx-auto pb-2">
+      <div className="flex items-center justify-between w-full">
 
         {/* Left Section */}
         <div className="flex items-center space-x-4">
@@ -243,6 +242,18 @@ export function WorkNavbar() {
             className="p-2 bg-white border border-blue-100 rounded-full hover:shadow-md transition-shadow duration-200"
           >
             <User className="w-4 h-4 text-gray-600" />
+          </motion.button>
+
+          {/* Refresh Button*/}
+          {/* Add Work Button */}
+          <motion.button
+            onClick={() => setIsWorkModalOpen(true)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm"
+          >
+            <RefreshCcw className="w-4 h-4" />
+            <span className="hidden md:inline text-sm font-medium">Add Work</span>
           </motion.button>
         </div>
       </div>
