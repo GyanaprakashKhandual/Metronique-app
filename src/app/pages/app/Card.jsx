@@ -151,17 +151,8 @@ const WorkCardView = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="min-h-screen bg-white">
             <div className="max-w-full mx-auto">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Project Works</h1>
-                    <button
-                        onClick={fetchWorks}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Refresh
-                    </button>
-                </div>
 
                 {works.length === 0 ? (
                     <div className="text-center py-12">

@@ -171,18 +171,8 @@ const WorkGraphView = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">Work Analytics Dashboard</h1>
-                    <button
-                        onClick={fetchWorks}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-                    >
-                        <FiRefreshCw className="mr-2" />
-                        Refresh Data
-                    </button>
-                </div>
+        <div className="min-h-screen bg-white">
+            <div className="max-w-full mx-auto">
 
                 {/* Tab Navigation */}
                 <div className="flex border-b border-gray-200 mb-6">

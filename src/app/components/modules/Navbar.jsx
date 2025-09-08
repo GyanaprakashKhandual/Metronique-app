@@ -26,7 +26,6 @@ import { WorkGraphView } from '@/app/pages/app/Graph';
 import { ArrowDownGoogle } from '../utils/Icon';
 
 export function WorkNavbar() {
-  const [showWork, setShowWork] = useState(false);
   const [projectData, setProjectData] = useState(null);
   const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -40,7 +39,7 @@ export function WorkNavbar() {
 
   const handleViewSelect = (option) => {
     setSelectedView(option.value);
-    setIsViewDropdownOpen(false); // close dropdown after select
+    setIsViewDropdownOpen(false);
   };
 
 
@@ -91,7 +90,8 @@ export function WorkNavbar() {
   const viewOptions = [
     { icon: BarChart3, label: 'Chart View', value: 'chart' },
     { icon: Grid3X3, label: 'Card View', value: 'card' },
-    { icon: Table, label: 'Table View', value: 'table' }
+    { icon: Table, label: 'Table View', value: 'table' },
+    { icon: Trello, label: 'Kanban', value: 'Kanban'},
   ];
 
 
@@ -190,17 +190,6 @@ export function WorkNavbar() {
             </AnimatePresence>
           </div>
 
-          {/* Kanban Button */}
-          <motion.button
-            onClick={() => setShowWork((prev) => !prev)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
-          >
-            <Trello className="w-4 h-4" />
-            <span className="hidden sm:inline text-sm font-medium">Kanban</span>
-          </motion.button>
-
 
 
 
@@ -261,6 +250,7 @@ export function WorkNavbar() {
         {selectedView === "chart" && <WorkGraphView />}
         {selectedView === "card" && <WorkCardView />}
         {selectedView === "table" && <WorkTableView />}
+        {selectedView === "kanban" && <WorkKanban/>}
       </div>
 
       <FilterSidebar
@@ -271,12 +261,6 @@ export function WorkNavbar() {
         isOpen={isWorkModalOpen}
         onClose={() => setIsWorkModalOpen(false)}
       />
-
-      {showWork && (
-        <div className="">
-          <WorkKanban />
-        </div>
-      )}
 
     </motion.nav>
 
