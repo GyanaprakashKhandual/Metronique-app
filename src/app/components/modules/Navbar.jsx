@@ -26,6 +26,7 @@ import { WorkTableView } from '@/app/pages/app/Table';
 import { WorkGraphView } from '@/app/pages/app/Graph';
 import { ArrowDownGoogle } from '../utils/Icon';
 import { getProjectDetailsForSubWork } from '@/app/script/GetProjectS';
+import { getWorkDetails } from '@/app/script/GetWokr';
 
 export function WorkNavbar() {
   // Retrieve token from localStorage
@@ -94,7 +95,7 @@ export function WorkNavbar() {
     const fetchProject = async () => {
       try {
         setLoading(true);
-        const data = await getProjectDetails();
+        const data = await getProjectDetailsForSubWork();
         if (data) {
           setProjectData(data);
           setError(null);
@@ -290,32 +291,22 @@ export function WorkNavbar() {
 }
 
 
+
+
 export function SubWorkNavbar() {
+  const [workData, setWorkData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  // Retrieve token from localStorage
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const [projectData, setProjectData] = useState(null);
   const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const dropdownRef = useRef(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isWorkModalOpen, setIsWorkModalOpen] = useState(false);
   const [selectedView, setSelectedView] = useState("kanban");
   const [project, setProject] = useState(null);
-
-  useEffect(() => {
-    const fetchProject = async () => {
-      const details = await getProjectDetailsForSubWork();
-      if (details) {
-        setProject(details);
-      }
-    };
-
-    fetchProject();
-  }, []);
-
-
-
-  const router = useRouter();
 
   // Options list
   const viewOptions = [
@@ -355,7 +346,7 @@ export function SubWorkNavbar() {
     const fetchProject = async () => {
       try {
         setLoading(true);
-        const data = await getProjectDetails();
+        const data = await getProjectDetailsForSubWork();
         if (data) {
           setProjectData(data);
           setError(null);
@@ -388,36 +379,54 @@ export function SubWorkNavbar() {
   // Find label for current view
   const currentViewLabel = viewOptions.find(v => v.value === selectedView)?.label || "Options";
 
-  return (
-    <motion.nav
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 pt-2 pb-2 h-15 w-full"
-    >
-      <div className="flex items-center justify-between w-full">
 
+  useEffect(() => {
+    const fetchWork = async () => {
+      try {
+        setLoading(true);
+        const data = await getWorkDetails();
+        if (data && data.work) {
+          setWorkData(data.work);
+          setError(null);
+        } else {
+          setError("Failed to load work data");
+        }
+      } catch (err) {
+        console.error("Error fetching work:", err);
+        setError("Error loading work data");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWork();
+  }, []);
+
+  return (
+    <motion.nav className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 pt-2 pb-2 h-15">
+      <div className="flex items-center justify-between">
+        
         {/* Left Section */}
         <div className="flex items-center space-x-4">
           <motion.div whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.95 }}>
             <FaCoffee className="w-8 h-8 text-blue-900" />
           </motion.div>
+
           <div className="hidden sm:block">
             {loading ? (
               <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
             ) : error ? (
-              <div className="text-red-500 text-sm">Error loading project</div>
-            ) : projectData ? (
+              <div className="text-red-500 text-sm">{error}</div>
+            ) : workData ? (
               <motion.h1
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
                 className="text-xl font-semibold text-gray-800 truncate max-w-xs"
               >
-                {work.workType || "Unnamed Project"}
+                {workData.workType || "Unnamed Work"}
               </motion.h1>
             ) : (
-              <div className="text-gray-500">No project data</div>
+              <div className="text-gray-500">No work data</div>
             )}
           </div>
         </div>
@@ -475,7 +484,16 @@ export function SubWorkNavbar() {
             </AnimatePresence>
           </div>
 
-  
+          {/* Add Work */}
+          <motion.button
+            onClick={() => setIsWorkModalOpen(true)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-sm"
+          >
+            <Plus className="w-4 h-4" />
+            <span className="hidden md:inline text-sm font-medium">Add Work</span>
+          </motion.button>
 
           {/* Add Sub Work */}
           <motion.button
@@ -506,7 +524,14 @@ export function SubWorkNavbar() {
             <Settings className="w-4 h-4 text-gray-600" />
           </motion.button>
 
-          
+          {/* Profile */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-2 bg-white border border-blue-100 rounded-full hover:shadow-md transition-shadow duration-200"
+          >
+            <User className="w-4 h-4 text-gray-600" />
+          </motion.button>
 
           {/* Refresh */}
           <motion.button
@@ -533,4 +558,7 @@ export function SubWorkNavbar() {
     </motion.nav>
   );
 }
+
+
+
 

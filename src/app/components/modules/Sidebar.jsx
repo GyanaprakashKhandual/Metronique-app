@@ -928,12 +928,11 @@ const SubWorkSidebar = () => {
     }
   }, [searchTerm, works]);
 
-  // Handle work item selection
   const handleWorkItemClick = (workId) => {
-    setSelectedWorkId(workId);
-    // You can add additional logic here for what happens when a work item is selected
-    console.log('Selected work ID:', workId);
-  };
+  setSelectedWorkId(workId);
+  localStorage.setItem("selectedWorkId", workId);
+};
+
 
   // Get priority color
   const getPriorityColor = (priority) => {
