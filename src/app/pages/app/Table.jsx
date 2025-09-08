@@ -214,21 +214,8 @@ const WorkTableView = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">Project Works</h1>
-                    <div className="flex space-x-3">
-                        <button
-                            onClick={fetchWorks}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-                        >
-                            <FiClock className="mr-2" />
-                            Refresh
-                        </button>
-                    </div>
-                </div>
-
+        <div className="h-[calc(100vh-86px)] bg-white">
+            <div className="max-w-full">
                 {works.length === 0 ? (
                     <div className="text-center py-12 bg-white rounded-lg shadow">
                         <p className="text-gray-500 text-lg">No works found for this project.</p>
@@ -240,7 +227,7 @@ const WorkTableView = () => {
                         </button>
                     </div>
                 ) : (
-                    <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div className="bg-white overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">

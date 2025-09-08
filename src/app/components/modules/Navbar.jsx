@@ -104,7 +104,7 @@ export function WorkNavbar() {
       transition={{ duration: 0.3 }}
       className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 py-3 h-15 w-full"
     >
-      <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
+      <div className="flex items-center justify-between w-full max-w-7xl mx-auto pb-2">
 
         {/* Left Section */}
         <div className="flex items-center space-x-4">
