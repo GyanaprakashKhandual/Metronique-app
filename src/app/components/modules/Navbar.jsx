@@ -15,6 +15,7 @@ import {
   User,
   RefreshCcw
 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 import { getProjectDetails } from '@/app/script/Getproject';
 import { FaCoffee } from 'react-icons/fa';
 import { FilterSidebar } from './Sidebar';
@@ -34,15 +35,33 @@ export function WorkNavbar() {
   const dropdownRef = useRef(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isWorkModalOpen, setIsWorkModalOpen] = useState(false);
-  const [selectedView, setSelectedView] = useState("chart");
+  const [selectedView, setSelectedView] = useState("kanban");
+  const [project, setProject] = useState(null);
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      const details = await getProjectDetails();
+      if (details) {
+        setProject(details);
+      }
+    };
+
+    fetchProject();
+  }, []);
+
+
+
+  const router = useRouter();
 
   // Options list
   const viewOptions = [
     { icon: BarChart3, label: 'Chart View', value: 'chart' },
     { icon: Grid3X3, label: 'Card View', value: 'card' },
     { icon: Table, label: 'Table View', value: 'table' },
-    { icon: Trello, label: 'Kanban', value: 'kanban' }, // fixed lowercase
+    { icon: Trello, label: 'Kanban', value: 'kanban' },
   ];
+
+
 
   // Load saved view from localStorage on mount
   useEffect(() => {
@@ -131,7 +150,7 @@ export function WorkNavbar() {
                 transition={{ delay: 0.2 }}
                 className="text-xl font-semibold text-gray-800 truncate max-w-xs"
               >
-                {projectData.projectName || "Unnamed Project"}
+                {project.project.projectName || "Unnamed Project"}
               </motion.h1>
             ) : (
               <div className="text-gray-500">No project data</div>
@@ -205,6 +224,7 @@ export function WorkNavbar() {
 
           {/* Add Sub Work */}
           <motion.button
+          onClick={() => router.push(`/app/projects/${project.project._id}/sub-work`)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="flex items-center space-x-2 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-600 transition-colors duration-200 shadow-sm"
