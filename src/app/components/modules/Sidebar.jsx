@@ -877,7 +877,7 @@ const SubWorkSidebar = () => {
   // Fetch project details
   useEffect(() => {
     const fetchProject = async () => {
-      const details = await getProjectDetails();
+      const details = await getProjectDetailsForSubWork();
       if (details) {
         setProject(details);
       }
