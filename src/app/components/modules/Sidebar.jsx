@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Plus, User, LogOut, Mail, ChevronUp, X, Filter, Calendar, Clock, Tag, Link, FileText, Search, ChevronRight, } from "lucide-react";
+import { Plus, User, LogOut, Mail, X, Filter, Calendar, Clock, Tag, Link, FileText, Search, ChevronRight, } from "lucide-react";
 import { FiSearch, FiClipboard, FiClock } from 'react-icons/fi';
 import { getProjectDetailsForSubWork } from "@/app/script/GetProjectS";
 import { FilterDropdown, ThreeDotsDropdown } from "../assets/Dropdown";

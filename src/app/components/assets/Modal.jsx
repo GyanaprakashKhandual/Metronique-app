@@ -6,7 +6,7 @@ import { X, Plus, Edit3, Save, Loader2, Calendar, FileText, Link as LinkIcon, Up
 import Alert from "../utils/Alert";
 import { Dropdown } from '../assets/Dropdown';
 import axios from 'axios';
-
+import { v2 as cloudinary } from "cloudinary";
 
 const AddProjectModal = ({ type, project, token, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -248,9 +248,18 @@ const AddProjectModal = ({ type, project, token, onClose, onSuccess }) => {
 
 
 
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
 const AddWorkModal = ({ isOpen, onClose }) => {
   const [projectDetails, setProjectDetails] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [uploadingFiles, setUploadingFiles] = useState(false);
   const [formData, setFormData] = useState({
     workType: '',
     workDesc: '',
@@ -334,20 +343,54 @@ const AddWorkModal = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files);
-    // In a real app, you would upload these files to a server
-    // and then store the file URLs in the formData
-    const newFiles = files.map(file => ({
-      fileName: file.name,
-      fileUrl: URL.createObjectURL(file),
-      uploadedAt: new Date()
-    }));
+    if (files.length === 0) return;
 
-    setFormData(prev => ({
-      ...prev,
-      workFiles: [...prev.workFiles, ...newFiles]
-    }));
+    setUploadingFiles(true);
+
+    try {
+      const uploadPromises = files.map(async (file) => {
+        // Convert file to base64 for Cloudinary upload
+        const reader = new FileReader();
+        
+        return new Promise((resolve, reject) => {
+          reader.onloadend = async () => {
+            try {
+              const base64 = reader.result;
+              
+              // Upload to Cloudinary
+              const response = await axios.post('/api/upload', {
+                data: base64
+              });
+              
+              resolve({
+                fileName: file.name,
+                fileUrl: response.data.url,
+                uploadedAt: new Date()
+              });
+            } catch (error) {
+              reject(error);
+            }
+          };
+          
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      });
+
+      const uploadedFiles = await Promise.all(uploadPromises);
+      
+      setFormData(prev => ({
+        ...prev,
+        workFiles: [...prev.workFiles, ...uploadedFiles]
+      }));
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      // You might want to add an error notification here
+    } finally {
+      setUploadingFiles(false);
+    }
   };
 
   const handleRemoveFile = (index) => {
@@ -403,7 +446,7 @@ const AddWorkModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // Dropdown options
+  // Dropdown options (same as before)
   const workTypeOptions = [
     { value: 'Design', label: 'Design' },
     { value: 'Development', label: 'Development' },
@@ -634,21 +677,29 @@ const AddWorkModal = ({ isOpen, onClose }) => {
                     Attachments
                   </label>
                   <div className="flex items-center justify-center w-full">
-                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <label className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer 
+                      ${uploadingFiles ? 'opacity-50 cursor-not-allowed' : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50'}`}>
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <Upload className="w-8 h-8 mb-3 text-gray-400" />
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          PDF, DOC, DOCX, PNG, JPG (MAX. 10MB)
-                        </p>
+                        {uploadingFiles ? (
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        ) : (
+                          <>
+                            <Upload className="w-8 h-8 mb-3 text-gray-400" />
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-semibold">Click to upload</span> or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              PDF, DOC, DOCX, PNG, JPG (MAX. 10MB)
+                            </p>
+                          </>
+                        )}
                       </div>
                       <input
                         type="file"
                         className="hidden"
                         multiple
                         onChange={handleFileUpload}
+                        disabled={uploadingFiles}
                       />
                     </label>
                   </div>
@@ -688,7 +739,7 @@ const AddWorkModal = ({ isOpen, onClose }) => {
                   </button>
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || uploadingFiles}
                     className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? 'Creating...' : 'Create Work'}
@@ -702,5 +753,7 @@ const AddWorkModal = ({ isOpen, onClose }) => {
     </AnimatePresence>
   );
 };
+
+export default AddWorkModal;
 
 export { AddProjectModal, AddWorkModal };
