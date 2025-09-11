@@ -9,7 +9,7 @@ import { FiSearch, FiClipboard, FiClock } from 'react-icons/fi';
 import { getProjectDetailsForSubWork } from "@/app/script/GetProjectS";
 import { FilterDropdown, ThreeDotsDropdown } from "../assets/Dropdown";
 import { FaCoffee } from "react-icons/fa";
-import { CalfFolder } from "../utils/Icon";
+import { ArrowDownGoogle, CalfFolder } from "../utils/Icon";
 import { AddProjectModal } from "../assets/Modal";
 import { getProjectDetails } from "@/app/script/Getproject";
 
@@ -402,7 +402,7 @@ const ProjectSidebar = () => {
                 animate={{ rotate: profileDropdownOpen ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronUp size={16} className="text-slate-500" />
+                <ArrowDownGoogle size={16} className="text-slate-500" />
               </motion.div>
             )}
           </button>
