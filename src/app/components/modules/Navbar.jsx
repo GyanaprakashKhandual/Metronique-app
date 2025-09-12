@@ -27,6 +27,7 @@ import { WorkGraphView } from '@/app/pages/app/Graph';
 import { ArrowDownGoogle } from '../utils/Icon';
 import { getProjectDetailsForSubWork } from '@/app/script/GetProjectS';
 import { getWorkDetails } from '@/app/script/GetWokr';
+import WorkModal from '../assets/AddWork';
 
 export function WorkNavbar() {
   // Retrieve token from localStorage
@@ -41,7 +42,9 @@ export function WorkNavbar() {
   const [isWorkModalOpen, setIsWorkModalOpen] = useState(false);
   const [selectedView, setSelectedView] = useState("kanban");
   const [project, setProject] = useState(null);
-
+const handleWorkSubmit = (result) => {
+  // Do something with the result, e.g. refresh list, show notification, etc.
+};
   useEffect(() => {
     const fetchProject = async () => {
       const details = await getProjectDetails();
@@ -285,7 +288,7 @@ export function WorkNavbar() {
       </div>
 
       <FilterSidebar isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
-      <AddWorkModal isOpen={isWorkModalOpen} onClose={() => setIsWorkModalOpen(false)} />
+      <WorkModal isOpen={isWorkModalOpen} onClose={() => setIsWorkModalOpen(false)} onSubmit={handleWorkSubmit} />
     </motion.nav>
   );
 }
