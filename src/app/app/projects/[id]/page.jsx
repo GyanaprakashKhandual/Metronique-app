@@ -62,7 +62,7 @@ export default async function ProjectPage({ params }) {
 
 
     return (
-      <div>
+      <div className="">
         <WorkNavbar />
       </div>
     );

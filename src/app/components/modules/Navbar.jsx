@@ -136,7 +136,7 @@ const handleWorkSubmit = (result) => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 pt-2 pb-2 h-15 w-full"
+      className="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-blue-100 px-4 pt-2 pb-2 h-15 w-full flex-shrink-0 sticky top-0 z-50"
     >
       <div className="flex items-center justify-between w-full">
 
