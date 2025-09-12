@@ -6,7 +6,6 @@ import { X, Plus, Edit3, Save, Loader2, Calendar, FileText, Link as LinkIcon, Up
 import Alert from "../utils/Alert";
 import { Dropdown } from '../assets/Dropdown';
 import axios from 'axios';
-import { v2 as cloudinary } from "cloudinary";
 
 const AddProjectModal = ({ type, project, token, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -249,13 +248,6 @@ const AddProjectModal = ({ type, project, token, onClose, onSuccess }) => {
 
 
 
-
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
-
 const AddWorkModal = ({ isOpen, onClose }) => {
   const [projectDetails, setProjectDetails] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -342,65 +334,6 @@ const AddWorkModal = ({ isOpen, onClose }) => {
       workLink: newLinks
     }));
   };
-
-  const handleFileUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
-
-    setUploadingFiles(true);
-
-    try {
-      const uploadPromises = files.map(async (file) => {
-        // Convert file to base64 for Cloudinary upload
-        const reader = new FileReader();
-        
-        return new Promise((resolve, reject) => {
-          reader.onloadend = async () => {
-            try {
-              const base64 = reader.result;
-              
-              // Upload to Cloudinary
-              const response = await axios.post('/api/upload', {
-                data: base64
-              });
-              
-              resolve({
-                fileName: file.name,
-                fileUrl: response.data.url,
-                uploadedAt: new Date()
-              });
-            } catch (error) {
-              reject(error);
-            }
-          };
-          
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-      });
-
-      const uploadedFiles = await Promise.all(uploadPromises);
-      
-      setFormData(prev => ({
-        ...prev,
-        workFiles: [...prev.workFiles, ...uploadedFiles]
-      }));
-    } catch (error) {
-      console.error("Error uploading files:", error);
-      // You might want to add an error notification here
-    } finally {
-      setUploadingFiles(false);
-    }
-  };
-
-  const handleRemoveFile = (index) => {
-    const newFiles = formData.workFiles.filter((_, i) => i !== index);
-    setFormData(prev => ({
-      ...prev,
-      workFiles: newFiles
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -669,63 +602,6 @@ const AddWorkModal = ({ isOpen, onClose }) => {
                       Add another link
                     </button>
                   </div>
-                </div>
-
-                {/* File Upload */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Attachments
-                  </label>
-                  <div className="flex items-center justify-center w-full">
-                    <label className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer 
-                      ${uploadingFiles ? 'opacity-50 cursor-not-allowed' : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50'}`}>
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        {uploadingFiles ? (
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                        ) : (
-                          <>
-                            <Upload className="w-8 h-8 mb-3 text-gray-400" />
-                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">Click to upload</span> or drag and drop
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                              PDF, DOC, DOCX, PNG, JPG (MAX. 10MB)
-                            </p>
-                          </>
-                        )}
-                      </div>
-                      <input
-                        type="file"
-                        className="hidden"
-                        multiple
-                        onChange={handleFileUpload}
-                        disabled={uploadingFiles}
-                      />
-                    </label>
-                  </div>
-
-                  {/* File List */}
-                  {formData.workFiles.length > 0 && (
-                    <div className="mt-4 space-y-2">
-                      {formData.workFiles.map((file, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                          <div className="flex items-center">
-                            <FileText className="w-5 h-5 text-gray-400 mr-3" />
-                            <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-xs">
-                              {file.fileName}
-                            </span>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveFile(index)}
-                            className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
 
                 {/* Form Actions */}
